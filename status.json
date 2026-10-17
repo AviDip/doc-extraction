@@ -50,5 +50,9 @@
     "rev": 0,
     "returncode": 0,
     "minutes": 7.2
+  },
+  "wr-calibrate": {
+    "state": "running",
+    "rev": 0
   }
 }
