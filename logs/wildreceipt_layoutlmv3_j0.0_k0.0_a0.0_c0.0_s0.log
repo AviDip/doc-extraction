@@ -1,0 +1,19 @@
+Loading weights:   0%|          | 0/212 [00:00<?, ?it/s]Loading weights: 100%|██████████| 212/212 [00:00<00:00, 3608.06it/s]
+[transformers] [1mLayoutLMv3ForTokenClassification LOAD REPORT[0m from: microsoft/layoutlmv3-base
+Key                        | Status  | 
+---------------------------+---------+-
+classifier.out_proj.weight | MISSING | 
+classifier.dense.weight    | MISSING | 
+classifier.dense.bias      | MISSING | 
+classifier.out_proj.bias   | MISSING | 
+
+Notes:
+- MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
+wildreceipt_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0: 1167 documents, 5840 steps on cuda
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (589 > 512). Running this sequence through the model will result in indexing errors
+{'ce': 1.44349, 'arith': 1.76238, 'card': 0.10852, 'epoch': 1, 'seconds': 29}
+{'ce': 0.36402, 'arith': 0.54624, 'card': 0.02396, 'epoch': 2, 'seconds': 28}
+{'ce': 0.23535, 'arith': 0.4022, 'card': 0.02409, 'epoch': 3, 'seconds': 28}
+{'ce': 0.16511, 'arith': 0.32404, 'card': 0.02213, 'epoch': 4, 'seconds': 28}
+{'ce': 0.1323, 'arith': 0.2533, 'card': 0.02097, 'epoch': 5, 'seconds': 23}
+{'ce': 0.10291, 'arith': 0.22827, 'card': 0.0192, 'epoch': 6, 'seconds': 24}

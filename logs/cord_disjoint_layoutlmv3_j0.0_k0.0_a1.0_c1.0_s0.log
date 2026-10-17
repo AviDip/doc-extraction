@@ -13,3 +13,13 @@ cord_disjoint_layoutlmv3_j0.0_k0.0_a1.0_c1.0_s0: 800 documents, 4000 steps on cu
 {'ce': 2.3473, 'arith': 0.2263, 'card': 0.08854, 'epoch': 1, 'seconds': 19}
 {'ce': 0.81713, 'arith': 0.17124, 'card': 0.03964, 'epoch': 2, 'seconds': 18}
 {'ce': 0.54027, 'arith': 0.14765, 'card': 0.03862, 'epoch': 3, 'seconds': 17}
+{'ce': 0.41752, 'arith': 0.11175, 'card': 0.02516, 'epoch': 4, 'seconds': 17}
+{'ce': 0.32455, 'arith': 0.09341, 'card': 0.02361, 'epoch': 5, 'seconds': 19}
+{'ce': 0.2796, 'arith': 0.07609, 'card': 0.02072, 'epoch': 6, 'seconds': 19}
+{'ce': 0.22188, 'arith': 0.06919, 'card': 0.02362, 'epoch': 7, 'seconds': 19}
+{'ce': 0.19713, 'arith': 0.06698, 'card': 0.01704, 'epoch': 8, 'seconds': 20}
+{'ce': 0.17434, 'arith': 0.06228, 'card': 0.01732, 'epoch': 9, 'seconds': 19}
+{'ce': 0.13106, 'arith': 0.03994, 'card': 0.02049, 'epoch': 10, 'seconds': 17}
+{'ce': 0.11878, 'arith': 0.02882, 'card': 0.02264, 'epoch': 11, 'seconds': 16}
+{'ce': 0.10131, 'arith': 0.0211, 'card': 0.02014, 'epoch': 12, 'seconds': 16}
+{'ce': 0.08936, 'arith': 0.01565, 'card': 0.01315, 'epoch': 13, 'seconds': 16}
