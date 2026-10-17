@@ -112,7 +112,9 @@
     "minutes": 1.1
   },
   "wr-data-v2": {
-    "state": "running",
-    "rev": 0
+    "state": "done",
+    "rev": 0,
+    "returncode": 0,
+    "minutes": 1.1
   }
 }
