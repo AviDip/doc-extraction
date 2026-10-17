@@ -48,8 +48,10 @@
     "minutes": 7.2
   },
   "cord_disjoint_layoutlmv3_j0.01_k0.0_a0.0_c0.0_s0": {
-    "state": "running",
-    "rev": 1
+    "state": "done",
+    "rev": 1,
+    "returncode": 0,
+    "minutes": 6.2
   },
   "wr-calibrate": {
     "state": "done",
