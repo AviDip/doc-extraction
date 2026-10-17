@@ -203,7 +203,7 @@ def _train_logged(cfg: TrainConfig) -> None:
     torch.set_num_threads(1)
     run_dir = Path(cfg.out) / cfg.run_name()
     run_dir.mkdir(parents=True, exist_ok=True)
-    with open(run_dir / "train.log", "w") as log, contextlib.redirect_stdout(log), contextlib.redirect_stderr(log):
+    with open(run_dir / "train.log", "w", buffering=1) as log, contextlib.redirect_stdout(log), contextlib.redirect_stderr(log):
         try:
             train(cfg)
         except BaseException:
