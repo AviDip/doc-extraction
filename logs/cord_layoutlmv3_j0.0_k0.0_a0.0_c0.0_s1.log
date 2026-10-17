@@ -17,3 +17,7 @@ cord_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s1: 800 documents, 4000 steps on cuda
 {'ce': 0.20526, 'arith': 0.09445, 'card': 0.17169, 'epoch': 5, 'seconds': 15}
 {'ce': 0.15447, 'arith': 0.05817, 'card': 0.13419, 'epoch': 6, 'seconds': 15}
 {'ce': 0.12074, 'arith': 0.03723, 'card': 0.10321, 'epoch': 7, 'seconds': 15}
+{'ce': 0.08905, 'arith': 0.02734, 'card': 0.08145, 'epoch': 8, 'seconds': 15}
+{'ce': 0.07462, 'arith': 0.02539, 'card': 0.07693, 'epoch': 9, 'seconds': 16}
+{'ce': 0.0629, 'arith': 0.02605, 'card': 0.05799, 'epoch': 10, 'seconds': 15}
+{'ce': 0.05017, 'arith': 0.01483, 'card': 0.05431, 'epoch': 11, 'seconds': 15}

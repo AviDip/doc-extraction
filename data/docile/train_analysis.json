@@ -1,0 +1,101 @@
+{
+  "split": "data/docile/train.pkl",
+  "documents": 5180,
+  "words_per_document": {
+    "mean": 292.6438223938224,
+    "p95": 801.0
+  },
+  "fields": 195028,
+  "fragmented_fields_share": 0.057735299546731754,
+  "equations": {
+    "net_items+tax=gross": {
+      "applicable_docs": 519,
+      "satisfied_share": 0.5414258188824663,
+      "satisfied_share_text_parse": 0.535645472061657
+    },
+    "gross_items=gross": {
+      "applicable_docs": 2531,
+      "satisfied_share": 0.6175424733306993,
+      "satisfied_share_text_parse": 0.6155669695772422
+    },
+    "net+tax=gross": {
+      "applicable_docs": 460,
+      "satisfied_share": 0.4152173913043478,
+      "satisfied_share_text_parse": 0.41304347826086957
+    }
+  },
+  "docs_with_any_satisfied_equation": 1869,
+  "singleton_fields": [
+    "amount_paid",
+    "amount_total_net",
+    "currency_code_amount_due",
+    "customer_registration_id",
+    "line_item_hts_number",
+    "payment_reference",
+    "tax_detail_gross",
+    "tax_detail_rate"
+  ],
+  "key_phrases_per_field": {
+    "account_num": 20,
+    "amount_due": 183,
+    "amount_paid": 33,
+    "amount_total_gross": 260,
+    "amount_total_net": 63,
+    "amount_total_tax": 30,
+    "bank_num": 12,
+    "bic": 5,
+    "currency_code_amount_due": 22,
+    "customer_billing_address": 106,
+    "customer_billing_name": 104,
+    "customer_delivery_address": 12,
+    "customer_delivery_name": 11,
+    "customer_id": 104,
+    "customer_order_id": 48,
+    "customer_other_address": 11,
+    "customer_other_name": 48,
+    "customer_registration_id": 1,
+    "customer_tax_id": 3,
+    "date_due": 30,
+    "date_issue": 159,
+    "document_id": 190,
+    "iban": 2,
+    "line_item_amount_gross": 99,
+    "line_item_amount_net": 34,
+    "line_item_code": 95,
+    "line_item_currency": 3,
+    "line_item_date": 282,
+    "line_item_description": 129,
+    "line_item_discount_amount": 1,
+    "line_item_discount_rate": 1,
+    "line_item_order_id": 5,
+    "line_item_person_name": 1,
+    "line_item_position": 6,
+    "line_item_quantity": 93,
+    "line_item_tax": 0,
+    "line_item_tax_rate": 0,
+    "line_item_unit_price_gross": 197,
+    "line_item_unit_price_net": 27,
+    "line_item_units_of_measure": 11,
+    "line_item_weight": 3,
+    "order_id": 214,
+    "payment_reference": 10,
+    "payment_terms": 69,
+    "tax_detail_gross": 5,
+    "tax_detail_net": 20,
+    "tax_detail_rate": 4,
+    "tax_detail_tax": 17,
+    "vendor_address": 150,
+    "vendor_email": 31,
+    "vendor_name": 168,
+    "vendor_order_id": 18,
+    "vendor_registration_id": 6,
+    "vendor_tax_id": 64
+  },
+  "tokens": {
+    "model": "layoutlmv3",
+    "mean": 632.861776061776,
+    "p95": 1831.2000000000007,
+    "longer_than_one_window": 0.40656370656370655,
+    "mean_windows": 1.8685328185328185
+  }
+}

@@ -74,7 +74,9 @@
     "rev": 0
   },
   "docile-analyse": {
-    "state": "running",
-    "rev": 0
+    "state": "done",
+    "rev": 0,
+    "returncode": 0,
+    "minutes": 1.0
   }
 }
