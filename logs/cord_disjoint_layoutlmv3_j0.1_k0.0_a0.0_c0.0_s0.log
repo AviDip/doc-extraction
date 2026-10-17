@@ -1,0 +1,22 @@
+Loading weights:   0%|          | 0/212 [00:00<?, ?it/s]Loading weights: 100%|██████████| 212/212 [00:00<00:00, 3535.63it/s]
+[transformers] [1mLayoutLMv3ForTokenClassification LOAD REPORT[0m from: microsoft/layoutlmv3-base
+Key                        | Status  | 
+---------------------------+---------+-
+classifier.out_proj.weight | MISSING | 
+classifier.dense.weight    | MISSING | 
+classifier.out_proj.bias   | MISSING | 
+classifier.dense.bias      | MISSING | 
+
+Notes:
+- MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
+cord_disjoint_layoutlmv3_j0.1_k0.0_a0.0_c0.0_s0: 800 documents, 4000 steps on cuda
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/content/doc-extraction/docext/train.py", line 204, in <module>
+    train(parse_args())
+    ~~~~~^^^^^^^^^^^^^^
+  File "/content/doc-extraction/docext/train.py", line 159, in train
+    sums += [ce.item(), arith.item(), card.item()]
+             ~~~~~~~^^
+KeyboardInterrupt
