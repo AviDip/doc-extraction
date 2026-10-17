@@ -1,6 +1,7 @@
 {
-  "templates": 94,
-  "official_test_replication": 0.96,
+  "threshold": 0.7,
+  "templates": 356,
+  "official_test_replication": 0.73,
   "disjoint_test_replication": 0.0,
   "sizes": {
     "test": 100,

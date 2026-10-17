@@ -108,5 +108,9 @@
   "cord-split-v2": {
     "state": "running",
     "rev": 0
+  },
+  "wr-data-v2": {
+    "state": "running",
+    "rev": 0
   }
 }
