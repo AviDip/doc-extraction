@@ -20,5 +20,9 @@
   "cord-split": {
     "state": "running",
     "rev": 0
+  },
+  "wr-analyse": {
+    "state": "running",
+    "rev": 0
   }
 }
