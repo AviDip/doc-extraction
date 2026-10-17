@@ -21,3 +21,14 @@ cord_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s2: 800 documents, 4000 steps on cuda
 {'ce': 0.08557, 'arith': 0.02648, 'card': 0.0779, 'epoch': 9, 'seconds': 15}
 {'ce': 0.06827, 'arith': 0.01666, 'card': 0.06517, 'epoch': 10, 'seconds': 15}
 {'ce': 0.0602, 'arith': 0.02045, 'card': 0.05513, 'epoch': 11, 'seconds': 15}
+{'ce': 0.04899, 'arith': 0.01369, 'card': 0.05075, 'epoch': 12, 'seconds': 16}
+{'ce': 0.03518, 'arith': 0.0086, 'card': 0.04753, 'epoch': 13, 'seconds': 16}
+{'ce': 0.02967, 'arith': 0.00377, 'card': 0.0382, 'epoch': 14, 'seconds': 18}
+{'ce': 0.02969, 'arith': 0.00636, 'card': 0.03959, 'epoch': 15, 'seconds': 18}
+{'ce': 0.0227, 'arith': 0.00421, 'card': 0.03901, 'epoch': 16, 'seconds': 18}
+{'ce': 0.02, 'arith': 0.00376, 'card': 0.03657, 'epoch': 17, 'seconds': 18}
+{'ce': 0.01352, 'arith': 0.00244, 'card': 0.03496, 'epoch': 18, 'seconds': 18}
+{'ce': 0.01358, 'arith': 0.00156, 'card': 0.03439, 'epoch': 19, 'seconds': 18}
+{'ce': 0.0105, 'arith': 0.00312, 'card': 0.03204, 'epoch': 20, 'seconds': 18}
+validation {"precision": 0.9536585365853658, "recall": 0.9559902200488998, "f1": 0.9548229548229548, "tp": 1173, "fp": 57, "fn": 54, "documents": 100}
+test {"precision": 0.9364599092284418, "recall": 0.9421613394216134, "f1": 0.9393019726858878, "tp": 1238, "fp": 84, "fn": 76, "documents": 100}
