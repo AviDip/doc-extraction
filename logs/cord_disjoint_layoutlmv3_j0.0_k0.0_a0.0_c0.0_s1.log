@@ -1,0 +1,23 @@
+Loading weights:   0%|          | 0/212 [00:00<?, ?it/s]Loading weights: 100%|██████████| 212/212 [00:00<00:00, 4749.50it/s]
+[transformers] [1mLayoutLMv3ForTokenClassification LOAD REPORT[0m from: microsoft/layoutlmv3-base
+Key                        | Status  | 
+---------------------------+---------+-
+classifier.dense.weight    | MISSING | 
+classifier.out_proj.weight | MISSING | 
+classifier.dense.bias      | MISSING | 
+classifier.out_proj.bias   | MISSING | 
+
+Notes:
+- MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
+cord_disjoint_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s1: 800 documents, 4000 steps on cuda
+{'ce': 2.36438, 'arith': 0.42926, 'card': 0.10459, 'epoch': 1, 'seconds': 24}
+{'ce': 0.74793, 'arith': 0.34107, 'card': 0.18231, 'epoch': 2, 'seconds': 23}
+{'ce': 0.44679, 'arith': 0.20782, 'card': 0.27473, 'epoch': 3, 'seconds': 23}
+{'ce': 0.29399, 'arith': 0.13324, 'card': 0.21652, 'epoch': 4, 'seconds': 22}
+{'ce': 0.20657, 'arith': 0.10045, 'card': 0.17945, 'epoch': 5, 'seconds': 21}
+{'ce': 0.16854, 'arith': 0.06164, 'card': 0.13333, 'epoch': 6, 'seconds': 21}
+{'ce': 0.12515, 'arith': 0.04831, 'card': 0.10439, 'epoch': 7, 'seconds': 21}
+{'ce': 0.11183, 'arith': 0.04135, 'card': 0.08768, 'epoch': 8, 'seconds': 21}
+{'ce': 0.08144, 'arith': 0.03004, 'card': 0.06382, 'epoch': 9, 'seconds': 20}
+{'ce': 0.06378, 'arith': 0.01656, 'card': 0.05811, 'epoch': 10, 'seconds': 18}
+{'ce': 0.05649, 'arith': 0.01582, 'card': 0.05574, 'epoch': 11, 'seconds': 15}
