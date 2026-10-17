@@ -12,8 +12,10 @@
     "minutes": 1.1
   },
   "docile-data": {
-    "state": "running",
-    "rev": 2
+    "state": "done",
+    "rev": 2,
+    "returncode": 0,
+    "minutes": 3.2
   },
   "cord-split": {
     "state": "done",
