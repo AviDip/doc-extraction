@@ -2,5 +2,9 @@
   "cord-data": {
     "state": "running",
     "rev": 0
+  },
+  "wr-data": {
+    "state": "running",
+    "rev": 0
   }
 }
