@@ -13,7 +13,8 @@ jobs.json:
               {"id": "cord-split", "cmd": "...", "needs": ["cord-data"]}]}
 
 "creates" names a file a job produces that is not published (a converted
-dataset); if it is missing after a restart, the job runs again.
+dataset); if it is missing after a restart, the job runs again. Raising a
+job's "rev" (default 0) reruns it, e.g. after a fix.
 
 Only commands starting with "python -m docext." or "bash scripts/" run, so
 the job list can never execute anything outside this project.
@@ -117,7 +118,7 @@ def run(remote: str, root: Path, results_path: Path) -> None:
         for job_id, (proc, began) in list(running.items()):
             if proc.poll() is not None:
                 state = "done" if proc.returncode == 0 else "failed"
-                status[job_id] = {"state": state, "returncode": proc.returncode, "minutes": round((time.time() - began) / 60, 1)}
+                status[job_id] |= {"state": state, "returncode": proc.returncode, "minutes": round((time.time() - began) / 60, 1)}
                 del running[job_id]
                 print(f"{state}: {job_id}")
                 results.publish(root, status, f"{state}: {job_id}")
@@ -129,14 +130,17 @@ def run(remote: str, root: Path, results_path: Path) -> None:
         for job in jobs["jobs"]:
             if len(running) >= jobs.get("parallel", 1):
                 break
-            if job["id"] in status or job["id"] in running or not set(job.get("needs", [])) <= done:
+            previous = status.get(job["id"])
+            if job["id"] in running or not set(job.get("needs", [])) <= done:
+                continue
+            if previous and previous.get("rev", 0) == job.get("rev", 0):
                 continue
             try:
                 running[job["id"]] = (start(job, root), time.time())
             except ValueError as err:
-                status[job["id"]] = {"state": "failed", "error": str(err)}
+                status[job["id"]] = {"state": "failed", "error": str(err), "rev": job.get("rev", 0)}
                 continue
-            status[job["id"]] = {"state": "running"}
+            status[job["id"]] = {"state": "running", "rev": job.get("rev", 0)}
             print(f"started: {job['id']}")
             results.publish(root, status, f"started: {job['id']}")
 
