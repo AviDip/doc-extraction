@@ -1,7 +1,8 @@
 __pycache__/
 .pytest_cache/
-data/
-runs/
-logs/
-results_*.csv
+# outputs at the project root only (docext/data/ is source code)
+/data/
+/runs/
+/logs/
+/results_*.csv
 *.zip
