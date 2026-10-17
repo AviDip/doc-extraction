@@ -6,8 +6,10 @@
     "minutes": 1.1
   },
   "wr-data": {
-    "state": "running",
-    "rev": 0
+    "state": "done",
+    "rev": 0,
+    "returncode": 0,
+    "minutes": 1.1
   },
   "docile-data": {
     "state": "running",
