@@ -14,3 +14,20 @@ cord_bros_j0.0_k0.0_a0.0_c0.0_s0: 800 documents, 4000 steps on cuda
 {'ce': 0.29471, 'arith': 0.09419, 'card': 0.16437, 'epoch': 3, 'seconds': 15}
 {'ce': 0.16419, 'arith': 0.06448, 'card': 0.12434, 'epoch': 4, 'seconds': 18}
 {'ce': 0.11788, 'arith': 0.04154, 'card': 0.08097, 'epoch': 5, 'seconds': 23}
+{'ce': 0.09499, 'arith': 0.02823, 'card': 0.06785, 'epoch': 6, 'seconds': 21}
+{'ce': 0.06646, 'arith': 0.02892, 'card': 0.05388, 'epoch': 7, 'seconds': 20}
+{'ce': 0.05115, 'arith': 0.01273, 'card': 0.04833, 'epoch': 8, 'seconds': 20}
+{'ce': 0.04223, 'arith': 0.00988, 'card': 0.04468, 'epoch': 9, 'seconds': 20}
+{'ce': 0.032, 'arith': 0.01129, 'card': 0.03851, 'epoch': 10, 'seconds': 20}
+{'ce': 0.02798, 'arith': 0.00367, 'card': 0.033, 'epoch': 11, 'seconds': 20}
+{'ce': 0.02129, 'arith': 0.00251, 'card': 0.0329, 'epoch': 12, 'seconds': 20}
+{'ce': 0.01718, 'arith': 0.00225, 'card': 0.03037, 'epoch': 13, 'seconds': 20}
+{'ce': 0.01533, 'arith': 0.00138, 'card': 0.03293, 'epoch': 14, 'seconds': 20}
+{'ce': 0.01152, 'arith': 0.00118, 'card': 0.02995, 'epoch': 15, 'seconds': 20}
+{'ce': 0.00931, 'arith': 0.00114, 'card': 0.03156, 'epoch': 16, 'seconds': 20}
+{'ce': 0.00762, 'arith': 0.00161, 'card': 0.02968, 'epoch': 17, 'seconds': 20}
+{'ce': 0.00545, 'arith': 0.00064, 'card': 0.02941, 'epoch': 18, 'seconds': 20}
+{'ce': 0.00528, 'arith': 0.00057, 'card': 0.02877, 'epoch': 19, 'seconds': 20}
+{'ce': 0.00472, 'arith': 0.00074, 'card': 0.02855, 'epoch': 20, 'seconds': 20}
+validation {"precision": 0.9601626016260163, "recall": 0.9625101874490628, "f1": 0.9613349613349614, "tp": 1181, "fp": 49, "fn": 46, "documents": 100}
+test {"precision": 0.9531013615733737, "recall": 0.958904109589041, "f1": 0.9559939301972685, "tp": 1260, "fp": 62, "fn": 54, "documents": 100}

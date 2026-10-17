@@ -11,3 +11,7 @@ Notes:
 - MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
 docile_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0: 5180 documents, 7770 steps on cuda
 [transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (1294 > 512). Running this sequence through the model will result in indexing errors
+/content/doc-extraction/docext/numbers.py:78: RuntimeWarning: overflow encountered in cast
+  values[i] = 0.0 if value is None else value
+{'ce': 0.91676, 'arith': 0.42424, 'card': 0.4904, 'epoch': 1, 'seconds': 179}
+{'ce': 0.28977, 'arith': 0.40208, 'card': 0.00053, 'epoch': 2, 'seconds': 167}
