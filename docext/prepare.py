@@ -15,6 +15,7 @@ from pathlib import Path
 import numpy as np
 
 from .schema import load_split, save_split, tags_to_entities
+from .split import DISTANCE_THRESHOLD
 
 
 def field_types_of(docs) -> list[str]:
@@ -31,13 +32,13 @@ def prepare_cord(out: Path) -> None:
         print(f"cord/{name}: {len(docs)} documents")
 
 
-def prepare_cord_disjoint(out: Path, seed: int) -> None:
+def prepare_cord_disjoint(out: Path, seed: int, threshold: float) -> None:
     from .split import cluster_templates, disjoint_split, replication_rate
 
     splits = {name: load_split(out / "cord" / f"{name}.pkl") for name in ("train", "validation", "test")}
     _, types, _ = splits["train"]
     docs = [d for name in splits for d in splits[name][2]]
-    clusters = cluster_templates(docs)
+    clusters = cluster_templates(docs, threshold)
     for doc, c in zip(docs, clusters):
         doc.cluster = int(c)
 
@@ -48,6 +49,7 @@ def prepare_cord_disjoint(out: Path, seed: int) -> None:
     assignment = disjoint_split(clusters, sizes, seed)
 
     report = {
+        "threshold": threshold,
         "templates": int(len(np.unique(clusters))),
         "official_test_replication": replication_rate(official["train"], official["test"]),
         "disjoint_test_replication": replication_rate(
@@ -64,7 +66,7 @@ def prepare_cord_disjoint(out: Path, seed: int) -> None:
     print(json.dumps(report, indent=2))
 
 
-def prepare_wildreceipt(raw: str, out: Path, seed: int, validation_size: int = 100) -> None:
+def prepare_wildreceipt(raw: str, out: Path, seed: int, threshold: float, validation_size: int = 100) -> None:
     """WildReceipt's test templates are unseen by design. A validation set of
     seen templates is held out from training, so
     Δ = F1(validation, seen layouts) - F1(test, unseen layouts)."""
@@ -73,7 +75,7 @@ def prepare_wildreceipt(raw: str, out: Path, seed: int, validation_size: int = 1
 
     splits, types = load_wildreceipt(raw)
     train, test = splits["train"], splits["test"]
-    clusters = cluster_templates(train + test)
+    clusters = cluster_templates(train + test, threshold)
     for doc, c in zip(train + test, clusters):
         doc.cluster = int(c)
     train_clusters = clusters[: len(train)]
@@ -86,6 +88,7 @@ def prepare_wildreceipt(raw: str, out: Path, seed: int, validation_size: int = 1
     }
     keep = np.array([i not in held for i in range(len(train))])
     report = {
+        "threshold": threshold,
         "templates": int(len(np.unique(clusters))),
         # near 0 if our key-based clusters agree with the authors' unseen-template test
         "test_replication": replication_rate(train_clusters[keep], clusters[len(train):]),
@@ -117,16 +120,18 @@ def main() -> None:
     parser.add_argument("--wildreceipt-path", help="extracted wildreceipt folder (class_list.txt, train.txt, test.txt)")
     parser.add_argument("--docile-path", help="unzipped DocILE annotated-trainval folder")
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--threshold", type=float, default=DISTANCE_THRESHOLD,
+                        help="template distance threshold (calibrate with python -m docext.split)")
     args = parser.parse_args()
 
     if args.dataset == "cord":
         prepare_cord(args.out)
     elif args.dataset == "cord-disjoint":
-        prepare_cord_disjoint(args.out, args.seed)
+        prepare_cord_disjoint(args.out, args.seed, args.threshold)
     elif args.dataset == "wildreceipt":
         if not args.wildreceipt_path:
             parser.error("--wildreceipt-path is required for wildreceipt")
-        prepare_wildreceipt(args.wildreceipt_path, args.out, args.seed)
+        prepare_wildreceipt(args.wildreceipt_path, args.out, args.seed, args.threshold)
     else:
         if not args.docile_path:
             parser.error("--docile-path is required for docile")
