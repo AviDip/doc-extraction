@@ -50,7 +50,7 @@ DocILE (optional) needs a free token from <https://docile.rossum.ai>, then:
 
 ```bash
 git clone --depth 1 https://github.com/rossumai/docile.git
-bash docile/download_dataset.sh $DOCILE_TOKEN labeled-trainval data/docile_raw --unzip
+bash docile/download_dataset.sh $DOCILE_TOKEN annotated-trainval data/docile_raw --unzip
 ```
 
 ## Automatic mode

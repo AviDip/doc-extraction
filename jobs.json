@@ -37,7 +37,7 @@
    "id": "docile-data",
    "cmd": "bash scripts/get_docile.sh",
    "creates": "data/docile/val.pkl",
-   "rev": 1
+   "rev": 2
   },
   {
    "id": "docile-analyse",
