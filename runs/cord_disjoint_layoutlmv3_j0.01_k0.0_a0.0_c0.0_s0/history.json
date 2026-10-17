@@ -11,21 +11,21 @@
     "arith": 0.35011,
     "card": 0.19462,
     "epoch": 2,
-    "seconds": 16
+    "seconds": 18
   },
   {
     "ce": 0.41091,
     "arith": 0.20683,
     "card": 0.29888,
     "epoch": 3,
-    "seconds": 14
+    "seconds": 18
   },
   {
     "ce": 0.27385,
     "arith": 0.12982,
     "card": 0.23672,
     "epoch": 4,
-    "seconds": 14
+    "seconds": 18
   },
   {
     "ce": 0.20229,
@@ -39,7 +39,7 @@
     "arith": 0.06206,
     "card": 0.13546,
     "epoch": 6,
-    "seconds": 19
+    "seconds": 18
   },
   {
     "ce": 0.12064,
@@ -88,7 +88,7 @@
     "arith": 0.007,
     "card": 0.04598,
     "epoch": 13,
-    "seconds": 19
+    "seconds": 18
   },
   {
     "ce": 0.02954,
@@ -109,7 +109,7 @@
     "arith": 0.006,
     "card": 0.03991,
     "epoch": 16,
-    "seconds": 19
+    "seconds": 18
   },
   {
     "ce": 0.01598,
@@ -137,6 +137,6 @@
     "arith": 0.00155,
     "card": 0.03613,
     "epoch": 20,
-    "seconds": 19
+    "seconds": 18
   }
 ]

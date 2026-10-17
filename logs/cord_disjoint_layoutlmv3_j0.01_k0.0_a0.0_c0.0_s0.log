@@ -1,0 +1,34 @@
+Loading weights:   0%|          | 0/212 [00:00<?, ?it/s]Loading weights: 100%|██████████| 212/212 [00:00<00:00, 4465.16it/s]
+[transformers] [1mLayoutLMv3ForTokenClassification LOAD REPORT[0m from: microsoft/layoutlmv3-base
+Key                        | Status  | 
+---------------------------+---------+-
+classifier.dense.bias      | MISSING | 
+classifier.out_proj.weight | MISSING | 
+classifier.out_proj.bias   | MISSING | 
+classifier.dense.weight    | MISSING | 
+
+Notes:
+- MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
+cord_disjoint_layoutlmv3_j0.01_k0.0_a0.0_c0.0_s0: 800 documents, 4000 steps on cuda
+{'ce': 2.32215, 'arith': 0.40155, 'card': 0.08608, 'epoch': 1, 'seconds': 19}
+{'ce': 0.70383, 'arith': 0.35011, 'card': 0.19462, 'epoch': 2, 'seconds': 18}
+{'ce': 0.41091, 'arith': 0.20683, 'card': 0.29888, 'epoch': 3, 'seconds': 18}
+{'ce': 0.27385, 'arith': 0.12982, 'card': 0.23672, 'epoch': 4, 'seconds': 18}
+{'ce': 0.20229, 'arith': 0.09666, 'card': 0.16458, 'epoch': 5, 'seconds': 18}
+{'ce': 0.1552, 'arith': 0.06206, 'card': 0.13546, 'epoch': 6, 'seconds': 18}
+{'ce': 0.12064, 'arith': 0.05352, 'card': 0.10067, 'epoch': 7, 'seconds': 18}
+{'ce': 0.09693, 'arith': 0.04335, 'card': 0.09718, 'epoch': 8, 'seconds': 18}
+{'ce': 0.0829, 'arith': 0.02299, 'card': 0.07346, 'epoch': 9, 'seconds': 18}
+{'ce': 0.06681, 'arith': 0.02116, 'card': 0.06604, 'epoch': 10, 'seconds': 18}
+{'ce': 0.05003, 'arith': 0.01186, 'card': 0.05825, 'epoch': 11, 'seconds': 18}
+{'ce': 0.04425, 'arith': 0.0084, 'card': 0.04971, 'epoch': 12, 'seconds': 18}
+{'ce': 0.03497, 'arith': 0.007, 'card': 0.04598, 'epoch': 13, 'seconds': 18}
+{'ce': 0.02954, 'arith': 0.00423, 'card': 0.04272, 'epoch': 14, 'seconds': 18}
+{'ce': 0.02271, 'arith': 0.00541, 'card': 0.03999, 'epoch': 15, 'seconds': 18}
+{'ce': 0.0215, 'arith': 0.006, 'card': 0.03991, 'epoch': 16, 'seconds': 18}
+{'ce': 0.01598, 'arith': 0.00401, 'card': 0.03802, 'epoch': 17, 'seconds': 18}
+{'ce': 0.01275, 'arith': 0.00304, 'card': 0.03695, 'epoch': 18, 'seconds': 18}
+{'ce': 0.01081, 'arith': 0.00176, 'card': 0.03531, 'epoch': 19, 'seconds': 18}
+{'ce': 0.00988, 'arith': 0.00155, 'card': 0.03613, 'epoch': 20, 'seconds': 18}
+validation {"precision": 0.9164179104477612, "recall": 0.9073891625615763, "f1": 0.9118811881188118, "tp": 921, "fp": 84, "fn": 94, "documents": 100}
+test {"precision": 0.9165666266506602, "recall": 0.9265776699029126, "f1": 0.9215449607724803, "tp": 1527, "fp": 139, "fn": 121, "documents": 100}
