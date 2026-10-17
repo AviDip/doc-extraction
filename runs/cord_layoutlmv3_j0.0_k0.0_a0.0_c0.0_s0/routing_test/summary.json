@@ -1,0 +1,35 @@
+{
+  "target_f1": 0.95,
+  "signals": {
+    "novelty": {
+      "coverage_at_target": 0.92,
+      "aurc": 0.038015374633249444,
+      "f1_at_full_coverage": 0.9465301478953356,
+      "exact_at_full_coverage": 0.71
+    },
+    "msp": {
+      "coverage_at_target": 0.97,
+      "aurc": 0.01923251928286825,
+      "f1_at_full_coverage": 0.9465301478953356,
+      "exact_at_full_coverage": 0.71
+    },
+    "mahalanobis": {
+      "coverage_at_target": 0.98,
+      "aurc": 0.016620337473210692,
+      "f1_at_full_coverage": 0.9465301478953356,
+      "exact_at_full_coverage": 0.71
+    },
+    "consistency": {
+      "coverage_at_target": 0.96,
+      "aurc": 0.04312366517767868,
+      "f1_at_full_coverage": 0.9465301478953356,
+      "exact_at_full_coverage": 0.71
+    },
+    "oracle": {
+      "coverage_at_target": 0.99,
+      "aurc": 0.006857250179133015,
+      "f1_at_full_coverage": 0.9465301478953356,
+      "exact_at_full_coverage": 0.71
+    }
+  }
+}

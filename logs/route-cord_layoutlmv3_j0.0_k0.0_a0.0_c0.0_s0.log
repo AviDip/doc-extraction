@@ -1,0 +1,5 @@
+novelty      coverage_at_target=0.920  aurc=0.038  f1_at_full_coverage=0.947  exact_at_full_coverage=0.710
+msp          coverage_at_target=0.970  aurc=0.019  f1_at_full_coverage=0.947  exact_at_full_coverage=0.710
+mahalanobis  coverage_at_target=0.980  aurc=0.017  f1_at_full_coverage=0.947  exact_at_full_coverage=0.710
+consistency  coverage_at_target=0.960  aurc=0.043  f1_at_full_coverage=0.947  exact_at_full_coverage=0.710
+oracle       coverage_at_target=0.990  aurc=0.007  f1_at_full_coverage=0.947  exact_at_full_coverage=0.710
