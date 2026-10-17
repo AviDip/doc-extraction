@@ -20,3 +20,15 @@ cord_disjoint_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s2: 800 documents, 4000 steps on cu
 {'ce': 0.09617, 'arith': 0.03869, 'card': 0.08097, 'epoch': 8, 'seconds': 16}
 {'ce': 0.08675, 'arith': 0.02691, 'card': 0.07036, 'epoch': 9, 'seconds': 15}
 {'ce': 0.06294, 'arith': 0.01853, 'card': 0.05574, 'epoch': 10, 'seconds': 15}
+{'ce': 0.05044, 'arith': 0.01561, 'card': 0.0489, 'epoch': 11, 'seconds': 15}
+{'ce': 0.03905, 'arith': 0.01288, 'card': 0.04202, 'epoch': 12, 'seconds': 16}
+{'ce': 0.0399, 'arith': 0.00856, 'card': 0.04041, 'epoch': 13, 'seconds': 18}
+{'ce': 0.02735, 'arith': 0.00346, 'card': 0.03078, 'epoch': 14, 'seconds': 18}
+{'ce': 0.0206, 'arith': 0.00711, 'card': 0.02966, 'epoch': 15, 'seconds': 18}
+{'ce': 0.01984, 'arith': 0.0007, 'card': 0.02665, 'epoch': 16, 'seconds': 18}
+{'ce': 0.01559, 'arith': 0.00197, 'card': 0.02527, 'epoch': 17, 'seconds': 18}
+{'ce': 0.01201, 'arith': 0.00155, 'card': 0.0243, 'epoch': 18, 'seconds': 18}
+{'ce': 0.01013, 'arith': 0.00205, 'card': 0.02471, 'epoch': 19, 'seconds': 18}
+{'ce': 0.00778, 'arith': 0.0006, 'card': 0.02433, 'epoch': 20, 'seconds': 18}
+validation {"precision": 0.9290030211480362, "recall": 0.9360730593607306, "f1": 0.9325246398786958, "tp": 1230, "fp": 94, "fn": 84, "documents": 100}
+test {"precision": 0.9171528588098017, "recall": 0.928529238038984, "f1": 0.9228059876724392, "tp": 1572, "fp": 142, "fn": 121, "documents": 100}
