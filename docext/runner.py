@@ -33,6 +33,7 @@ import time
 from pathlib import Path
 
 ALLOWED = ("python -m docext.", "bash scripts/")
+SECRET_VARS = ("GITHUB_TOKEN", "DOCILE_TOKEN")  # never published, even if a tool prints them
 POLL_SECONDS = 60
 RESULTS_BRANCH = "results"
 
@@ -87,6 +88,7 @@ class Results:
             if (root / name).exists():
                 shutil.copytree(root / name, self.path / name, dirs_exist_ok=True,
                                 ignore=shutil.ignore_patterns("model"))
+        self._redact_logs()
         for report in list((root / "data").glob("*/*.json")) + list(root.glob("results_*.csv")):
             target = self.path / report.relative_to(root)
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -99,6 +101,16 @@ class Results:
             git("push", "-q", "origin", RESULTS_BRANCH, cwd=self.path)
         except RuntimeError as err:
             print(f"warning: {err}")
+
+    def _redact_logs(self) -> None:
+        secrets = [os.environ[v] for v in SECRET_VARS if os.environ.get(v)]
+        for log in (self.path / "logs").glob("*.log") if secrets else []:
+            text = log.read_text(errors="replace")
+            clean = text
+            for secret in secrets:
+                clean = clean.replace(secret, "***")
+            if clean != text:
+                log.write_text(clean)
 
 
 def load_jobs(root: Path, last: dict) -> dict:
