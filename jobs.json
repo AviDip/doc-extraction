@@ -1,0 +1,161 @@
+{
+ "parallel": 3,
+ "jobs": [
+  {
+   "id": "cord-data",
+   "cmd": "python -m docext.prepare cord --out data",
+   "creates": "data/cord/train.pkl"
+  },
+  {
+   "id": "cord-split",
+   "cmd": "python -m docext.prepare cord-disjoint --out data",
+   "needs": [
+    "cord-data"
+   ],
+   "creates": "data/cord_disjoint/train.pkl"
+  },
+  {
+   "id": "cord-analyse",
+   "cmd": "python -m docext.analyse data/cord/train.pkl --model layoutlmv3",
+   "needs": [
+    "cord-split"
+   ]
+  },
+  {
+   "id": "wr-data",
+   "cmd": "bash scripts/get_wildreceipt.sh",
+   "creates": "data/wildreceipt/train.pkl"
+  },
+  {
+   "id": "wr-analyse",
+   "cmd": "python -m docext.analyse data/wildreceipt/train.pkl --model layoutlmv3",
+   "needs": [
+    "wr-data"
+   ]
+  },
+  {
+   "id": "docile-data",
+   "cmd": "bash scripts/get_docile.sh",
+   "creates": "data/docile/val.pkl"
+  },
+  {
+   "id": "docile-analyse",
+   "cmd": "python -m docext.analyse data/docile/train.pkl --model layoutlmv3",
+   "needs": [
+    "docile-data"
+   ]
+  },
+  {
+   "id": "cord_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0",
+   "cmd": "python -m docext.train --data data/cord --eval-splits validation test",
+   "needs": [
+    "cord-split"
+   ]
+  },
+  {
+   "id": "cord_disjoint_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0",
+   "cmd": "python -m docext.train --data data/cord_disjoint --eval-splits validation test",
+   "needs": [
+    "cord-split"
+   ]
+  },
+  {
+   "id": "cord_disjoint_layoutlmv3_j0.01_k0.0_a0.0_c0.0_s0",
+   "cmd": "python -m docext.train --data data/cord_disjoint --eval-splits validation test --jitter 0.01",
+   "needs": [
+    "cord-split"
+   ]
+  },
+  {
+   "id": "cord_disjoint_layoutlmv3_j0.03_k0.0_a0.0_c0.0_s0",
+   "cmd": "python -m docext.train --data data/cord_disjoint --eval-splits validation test --jitter 0.03",
+   "needs": [
+    "cord-split"
+   ]
+  },
+  {
+   "id": "cord_disjoint_layoutlmv3_j0.05_k0.0_a0.0_c0.0_s0",
+   "cmd": "python -m docext.train --data data/cord_disjoint --eval-splits validation test --jitter 0.05",
+   "needs": [
+    "cord-split"
+   ]
+  },
+  {
+   "id": "cord_disjoint_layoutlmv3_j0.1_k0.0_a0.0_c0.0_s0",
+   "cmd": "python -m docext.train --data data/cord_disjoint --eval-splits validation test --jitter 0.1",
+   "needs": [
+    "cord-split"
+   ]
+  },
+  {
+   "id": "cord_disjoint_layoutlmv3_j0.0_k0.5_a0.0_c0.0_s0",
+   "cmd": "python -m docext.train --data data/cord_disjoint --eval-splits validation test --key-swap 0.5",
+   "needs": [
+    "cord-split"
+   ]
+  },
+  {
+   "id": "cord_disjoint_layoutlmv3_j0.0_k0.0_a0.1_c0.1_s0",
+   "cmd": "python -m docext.train --data data/cord_disjoint --eval-splits validation test --lambda-arith 0.1 --lambda-card 0.1",
+   "needs": [
+    "cord-split"
+   ]
+  },
+  {
+   "id": "cord_disjoint_layoutlmv3_j0.0_k0.0_a0.3_c0.3_s0",
+   "cmd": "python -m docext.train --data data/cord_disjoint --eval-splits validation test --lambda-arith 0.3 --lambda-card 0.3",
+   "needs": [
+    "cord-split"
+   ]
+  },
+  {
+   "id": "cord_disjoint_layoutlmv3_j0.0_k0.0_a1.0_c1.0_s0",
+   "cmd": "python -m docext.train --data data/cord_disjoint --eval-splits validation test --lambda-arith 1.0 --lambda-card 1.0",
+   "needs": [
+    "cord-split"
+   ]
+  },
+  {
+   "id": "route-cord_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0",
+   "cmd": "python -m docext.routing runs/cord_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0 --split test --target 0.95",
+   "needs": [
+    "cord_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0"
+   ]
+  },
+  {
+   "id": "route-cord_disjoint_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0",
+   "cmd": "python -m docext.routing runs/cord_disjoint_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0 --split test --target 0.95",
+   "needs": [
+    "cord_disjoint_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0"
+   ]
+  },
+  {
+   "id": "wildreceipt_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0",
+   "cmd": "python -m docext.train --data data/wildreceipt --eval-splits validation test --seed 0",
+   "needs": [
+    "wr-data"
+   ]
+  },
+  {
+   "id": "wildreceipt_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s1",
+   "cmd": "python -m docext.train --data data/wildreceipt --eval-splits validation test --seed 1",
+   "needs": [
+    "wr-data"
+   ]
+  },
+  {
+   "id": "wildreceipt_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s2",
+   "cmd": "python -m docext.train --data data/wildreceipt --eval-splits validation test --seed 2",
+   "needs": [
+    "wr-data"
+   ]
+  },
+  {
+   "id": "docile_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0",
+   "cmd": "python -m docext.train --data data/docile --eval-splits val --epochs 6",
+   "needs": [
+    "docile-data"
+   ]
+  }
+ ]
+}
