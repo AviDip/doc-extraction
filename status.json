@@ -186,8 +186,10 @@
     "minutes": 7.2
   },
   "cord_disjoint_layoutlmv3_j0.0_k0.0_a0.1_c0.1_s0": {
-    "state": "running",
-    "rev": 1
+    "state": "done",
+    "rev": 1,
+    "returncode": 0,
+    "minutes": 6.2
   },
   "cord_disjoint_layoutlmv3_j0.0_k0.0_a0.3_c0.3_s0": {
     "state": "running",

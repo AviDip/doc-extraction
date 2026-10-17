@@ -27,3 +27,8 @@ cord_disjoint_layoutlmv3_j0.0_k0.0_a0.1_c0.1_s0: 800 documents, 4000 steps on cu
 {'ce': 0.02231, 'arith': 0.00271, 'card': 0.02021, 'epoch': 15, 'seconds': 15}
 {'ce': 0.01929, 'arith': 0.00159, 'card': 0.01794, 'epoch': 16, 'seconds': 15}
 {'ce': 0.01633, 'arith': 0.00134, 'card': 0.01898, 'epoch': 17, 'seconds': 16}
+{'ce': 0.01382, 'arith': 0.0006, 'card': 0.01535, 'epoch': 18, 'seconds': 16}
+{'ce': 0.01103, 'arith': 0.00098, 'card': 0.01871, 'epoch': 19, 'seconds': 18}
+{'ce': 0.00975, 'arith': 0.00046, 'card': 0.01587, 'epoch': 20, 'seconds': 18}
+validation {"precision": 0.9401515151515152, "recall": 0.9444444444444444, "f1": 0.9422930903568716, "tp": 1241, "fp": 79, "fn": 73, "documents": 100}
+test {"precision": 0.9302461899179367, "recall": 0.9373892498523332, "f1": 0.9338040600176524, "tp": 1587, "fp": 119, "fn": 106, "documents": 100}

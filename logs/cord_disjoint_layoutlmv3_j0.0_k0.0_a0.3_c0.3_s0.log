@@ -20,3 +20,6 @@ cord_disjoint_layoutlmv3_j0.0_k0.0_a0.3_c0.3_s0: 800 documents, 4000 steps on cu
 {'ce': 0.12575, 'arith': 0.03792, 'card': 0.03515, 'epoch': 8, 'seconds': 15}
 {'ce': 0.10288, 'arith': 0.0255, 'card': 0.03352, 'epoch': 9, 'seconds': 15}
 {'ce': 0.08468, 'arith': 0.02149, 'card': 0.02509, 'epoch': 10, 'seconds': 16}
+{'ce': 0.07174, 'arith': 0.02211, 'card': 0.01938, 'epoch': 11, 'seconds': 16}
+{'ce': 0.06045, 'arith': 0.01881, 'card': 0.01774, 'epoch': 12, 'seconds': 18}
+{'ce': 0.0473, 'arith': 0.00905, 'card': 0.01415, 'epoch': 13, 'seconds': 18}
