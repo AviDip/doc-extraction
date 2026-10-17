@@ -11,8 +11,10 @@ Document extraction models read invoices and receipts with over 90% of fields co
 ## Running it
 1. Open the notebook in Colab (button above, or upload the file).
 2. **Runtime → Change runtime type → A100.**
-3. Optional: add your DocILE token (free, docile.rossum.ai) in Colab's **Secrets** panel as `DOCILE_TOKEN`, or in the `DOCILE_TOKEN` setting in section 15. Without it, DocILE is skipped.
-4. **Runtime → Run all.** The full run takes about six hours.
+3. Optional: add your DocILE token (free, docile.rossum.ai) in Colab's **Secrets** panel (key icon on the left) as `DOCILE_TOKEN`, with *Notebook access* on. Without it, DocILE is skipped.
+4. **Runtime → Run all**, and allow Google Drive access when asked (once, at the start). Finished runs are saved in your Drive under `doc-extraction/runs`.
+
+Three runs share the GPU at a time; on an A100 the full run takes about two and a half hours. If the session stops, open the notebook again and **Run all**: the data is rebuilt in a few minutes and only unfinished runs are trained.
 
 Datasets are downloaded from their public sources: CORD (Hugging Face), WildReceipt (OpenMMLab), DocILE (official toolkit).
 
