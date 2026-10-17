@@ -1,0 +1,14 @@
+Loading weights:   0%|          | 0/212 [00:00<?, ?it/s]Loading weights: 100%|██████████| 212/212 [00:00<00:00, 4868.69it/s]
+[transformers] [1mLayoutLMv3ForTokenClassification LOAD REPORT[0m from: microsoft/layoutlmv3-base
+Key                        | Status  | 
+---------------------------+---------+-
+classifier.dense.bias      | MISSING | 
+classifier.out_proj.weight | MISSING | 
+classifier.dense.weight    | MISSING | 
+classifier.out_proj.bias   | MISSING | 
+
+Notes:
+- MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
+cord_disjoint_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0: 800 documents, 4000 steps on cuda
+{'ce': 2.32172, 'arith': 0.39756, 'card': 0.10204, 'epoch': 1, 'seconds': 21}
+{'ce': 0.74215, 'arith': 0.36012, 'card': 0.20659, 'epoch': 2, 'seconds': 20}
