@@ -10,21 +10,12 @@ Document extraction models read invoices and receipts with over 90% of fields co
 
 ## Running it
 1. Open the notebook in Colab (button above, or upload the file).
-2. Choose a runtime (**Runtime → Change runtime type**); a GPU is needed only to train new runs.
-3. **Runtime → Run all.**
+2. **Runtime → Change runtime type → A100.**
+3. Optional: add your DocILE token (free, docile.rossum.ai) in Colab's **Secrets** panel as `DOCILE_TOKEN`, or in the `DOCILE_TOKEN` setting in section 15. Without it, DocILE is skipped.
+4. **Runtime → Run all.** The full run takes about six hours.
 
-The notebook reuses finished runs from this repository's `results` branch, trains anything missing when a GPU is available, and includes DocILE when it finds a token: in the `DOCILE_TOKEN` setting, in Colab's **Secrets** panel as `DOCILE_TOKEN`, or in a file `docile_token.txt`. Datasets come from their public sources:
+Datasets are downloaded from their public sources: CORD (Hugging Face), WildReceipt (OpenMMLab), DocILE (official toolkit).
 
-| Dataset | Source |
-|---|---|
-| CORD | Hugging Face (`naver-clova-ix/cord-v2`) |
-| WildReceipt | OpenMMLab |
-| DocILE (optional) | official toolkit, free token from docile.rossum.ai |
-
-| Branch | Contents |
-|---|---|
-| `main` | the notebook |
-| `results` | finished runs, logs and reports |
-| `source` | the same code as a Python package, with tests and the script that builds the notebook |
+The same code as a Python package, with tests and the script that builds this notebook, is on the `source` branch.
 
 Code: MIT licence. Datasets keep their own licences.
