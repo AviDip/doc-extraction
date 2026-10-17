@@ -186,5 +186,9 @@
   "cord_disjoint_layoutlmv3_j0.0_k0.0_a0.1_c0.1_s0": {
     "state": "running",
     "rev": 1
+  },
+  "cord_disjoint_layoutlmv3_j0.0_k0.0_a0.3_c0.3_s0": {
+    "state": "running",
+    "rev": 1
   }
 }
