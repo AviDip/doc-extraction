@@ -25,6 +25,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import shlex
 import shutil
 import subprocess
@@ -37,7 +38,12 @@ RESULTS_BRANCH = "results"
 
 
 def git(*args: str, cwd: Path, check: bool = True) -> subprocess.CompletedProcess:
-    return subprocess.run(["git", *args], cwd=cwd, check=check, capture_output=True, text=True)
+    """Run git; on failure raise with git's own message, token removed."""
+    proc = subprocess.run(["git", *args], cwd=cwd, capture_output=True, text=True)
+    if check and proc.returncode:
+        message = re.sub(r"x-access-token:[^@]+@", "x-access-token:***@", proc.stderr.strip())
+        raise RuntimeError(f"git {args[0]} failed: {message}")
+    return proc
 
 
 class Results:
@@ -58,6 +64,13 @@ class Results:
                     if item.name != ".git":
                         shutil.rmtree(item) if item.is_dir() else item.unlink()
                 git("commit", "-q", "--allow-empty", "-m", "Start results branch", cwd=path)
+        try:  # fail now, before any job starts, if the token cannot push
+            git("push", "-q", "-u", "origin", RESULTS_BRANCH, cwd=path)
+        except RuntimeError as err:
+            raise SystemExit(
+                f"{err}\nGitHub refused the push. Check that the token is fine-grained, limited to this "
+                "repository, and has 'Contents: Read and write' permission."
+            ) from None
 
     def status(self) -> dict:
         f = self.path / "status.json"
@@ -82,7 +95,10 @@ class Results:
         git("add", "-A", cwd=self.path)
         if git("diff", "--cached", "--quiet", cwd=self.path, check=False).returncode:
             git("commit", "-q", "-m", message, cwd=self.path)
+        try:  # a failed push is retried with the next publish; jobs keep running
             git("push", "-q", "origin", RESULTS_BRANCH, cwd=self.path)
+        except RuntimeError as err:
+            print(f"warning: {err}")
 
 
 def load_jobs(root: Path, last: dict) -> dict:
