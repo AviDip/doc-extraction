@@ -12,3 +12,4 @@ Notes:
 cord_disjoint_layoutlmv3_j0.0_k0.0_a1.0_c1.0_s0: 800 documents, 4000 steps on cuda
 {'ce': 2.3473, 'arith': 0.2263, 'card': 0.08854, 'epoch': 1, 'seconds': 19}
 {'ce': 0.81713, 'arith': 0.17124, 'card': 0.03964, 'epoch': 2, 'seconds': 18}
+{'ce': 0.54027, 'arith': 0.14765, 'card': 0.03862, 'epoch': 3, 'seconds': 17}
