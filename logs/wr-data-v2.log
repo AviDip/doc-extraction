@@ -1,0 +1,11 @@
+{
+  "threshold": 0.5,
+  "templates": 1594,
+  "test_replication": 0.025423728813559324,
+  "validation_replication": 1.0,
+  "sizes": {
+    "train": 1167,
+    "validation": 100,
+    "test": 472
+  }
+}
