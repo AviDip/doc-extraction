@@ -1,0 +1,54 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (613 > 512). Running this sequence through the model will result in indexing errors
+{
+  "split": "data/wildreceipt/train.pkl",
+  "documents": 1167,
+  "words_per_document": {
+    "mean": 39.17395029991431,
+    "p95": 72.0
+  },
+  "fields": 23206,
+  "fragmented_fields_share": 0.0,
+  "equations": {
+    "items=subtotal": {
+      "applicable_docs": 760,
+      "satisfied_share": 0.7394736842105263,
+      "satisfied_share_text_parse": 0.7394736842105263
+    },
+    "items+tax+tips=total": {
+      "applicable_docs": 943,
+      "satisfied_share": 0.4019088016967126,
+      "satisfied_share_text_parse": 0.4019088016967126
+    },
+    "subtotal+tax+tips=total": {
+      "applicable_docs": 732,
+      "satisfied_share": 0.48633879781420764,
+      "satisfied_share_text_parse": 0.48633879781420764
+    }
+  },
+  "docs_with_any_satisfied_equation": 757,
+  "singleton_fields": [
+    "Tel"
+  ],
+  "key_phrases_per_field": {
+    "Date": 20,
+    "Prod_item": 11,
+    "Prod_price": 42,
+    "Prod_quantity": 9,
+    "Store_addr": 0,
+    "Store_name": 0,
+    "Subtotal": 45,
+    "Tax": 45,
+    "Tel": 20,
+    "Time": 7,
+    "Tips": 4,
+    "Total": 88
+  },
+  "tokens": {
+    "model": "layoutlmv3",
+    "mean": 160.6452442159383,
+    "p95": 296.0,
+    "longer_than_one_window": 0.006855184233076264,
+    "mean_windows": 1.0068551842330762
+  }
+}

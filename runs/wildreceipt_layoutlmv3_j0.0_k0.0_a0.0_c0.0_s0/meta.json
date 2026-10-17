@@ -1,0 +1,47 @@
+{
+  "config": {
+    "data": "data/wildreceipt",
+    "model": "layoutlmv3",
+    "train_split": "train",
+    "eval_splits": [
+      "validation",
+      "test"
+    ],
+    "out": "runs",
+    "name": "",
+    "epochs": 20,
+    "batch_size": 4,
+    "lr": 5e-05,
+    "jitter": 0.0,
+    "key_swap": 0.0,
+    "lambda_arith": 0.0,
+    "lambda_card": 0.0,
+    "max_windows": 4,
+    "seed": 0,
+    "save_model": false
+  },
+  "dataset": "wildreceipt",
+  "field_types": [
+    "Date",
+    "Prod_item",
+    "Prod_price",
+    "Prod_quantity",
+    "Store_addr",
+    "Store_name",
+    "Subtotal",
+    "Tax",
+    "Tel",
+    "Time",
+    "Tips",
+    "Total"
+  ],
+  "singletons": [
+    "Tel"
+  ],
+  "equations": [
+    "items=subtotal",
+    "items+tax+tips=total",
+    "subtotal+tax+tips=total"
+  ],
+  "device": "cuda"
+}
