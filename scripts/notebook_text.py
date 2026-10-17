@@ -18,7 +18,7 @@ This notebook builds and tests two ideas:
 | **Make fewer errors on unfamiliar layouts** | Train with small random changes to the page and wording, and add a check that the extracted amounts add up. |
 | **Find the errors that remain, without labels** | Score each document's risk; send only risky ones to a person. |
 
-**How to run.** Run the cells from top to bottom. Part A builds the code, one small piece at a time. Part B uses it. Only the datasets are downloaded, from their public sources. By default, Part B reuses finished training runs from the project's GitHub repository, so everything can be reproduced on an ordinary computer in minutes.
+**How to run.** Choose a GPU runtime (an A100) and run all cells. Part A builds the code, one small piece at a time; Part B downloads the datasets from their public sources and trains every model. The full run takes about six hours.
 
 | | Section |
 |---|---|
@@ -64,7 +64,8 @@ SETUP_CODE = r"""
 !pip install -q "transformers>=4.45" "datasets>=2.19" "docile-benchmark>=0.3" scikit-learn matplotlib -c /tmp/pins.txt
 
 import torch
-print('GPU:', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'none (Part B reuses finished runs)')
+assert torch.cuda.is_available(), 'Choose a GPU: Runtime → Change runtime type → A100'
+print('GPU:', torch.cuda.get_device_name(0))
 """
 
 SECTIONS = [
@@ -419,52 +420,24 @@ PART_B = [
 
 ## 15. Data, layout check and label check
 
-Part B decides by itself what to do:
-
-| Situation | What happens |
-|---|---|
-| Finished runs exist in the project's GitHub repository (`results` branch) | they are reused; no account is needed |
-| A GPU is available | any run not yet finished is trained |
-| No GPU | training is skipped and the finished runs are used |
-| A DocILE token is found | DocILE is downloaded and included; otherwise it is skipped |
-
-**The DocILE token** (free, from docile.rossum.ai) is read from, in order: the `DOCILE_TOKEN` setting below, Colab's **Secrets** panel (the key icon on the left; add a secret named `DOCILE_TOKEN`), or a file `docile_token.txt` uploaded next to the notebook. Keep the token out of any copy you share.
+DocILE needs a free token from docile.rossum.ai. Put it in `DOCILE_TOKEN` below, or in Colab's **Secrets** panel (key icon on the left) under the name `DOCILE_TOKEN`. Without a token, DocILE is skipped and everything else runs.
 """),
     ("code", r"""
-import os
 from pathlib import Path
 
-DOCILE_TOKEN = ''   # optional: paste your DocILE token here (in your own copy only)
+DOCILE_TOKEN = ''   # your DocILE token (keep it out of any copy you share)
 
 DATA, RUNS = Path('data'), Path('runs')
 DOCILE_RAW = Path('/content/docile_raw')
-HAS_GPU = torch.cuda.is_available()
 
-
-def find_docile_token() -> str | None:
-    if DOCILE_TOKEN.strip():
-        return DOCILE_TOKEN.strip()
+if not DOCILE_TOKEN:
     try:
         from google.colab import userdata
-        return userdata.get('DOCILE_TOKEN')
-    except Exception:  # not on Colab, or no such secret
+        DOCILE_TOKEN = userdata.get('DOCILE_TOKEN')
+    except Exception:  # no secret set
         pass
-    if os.environ.get('DOCILE_TOKEN'):
-        return os.environ['DOCILE_TOKEN']
-    for file in (Path('docile_token.txt'), Path('/content/docile_token.txt')):
-        if file.exists():
-            return file.read_text().strip()
-    return None
-
-
-TOKEN = find_docile_token()
-RUN_DOCILE = bool(TOKEN)
-print(f"GPU: {'yes' if HAS_GPU else 'no'} · DocILE: {'included' if RUN_DOCILE else 'skipped (no token found)'}")
-
-# finished runs from the project's public results branch
-!rm -rf /tmp/published && git clone -q --depth 1 --branch results https://github.com/AviDip/doc-extraction /tmp/published
-!mkdir -p runs data && cp -rn /tmp/published/runs/. runs/ && cp -rn /tmp/published/data/. data/
-print(len(list(RUNS.glob('*/metrics.json'))), 'finished runs reused')
+RUN_DOCILE = bool(DOCILE_TOKEN)
+print('DocILE:', 'included' if RUN_DOCILE else 'skipped (no token)')
 """),
     ("md", "### 15.1 Downloading the data\nCORD comes from Hugging Face and WildReceipt from OpenMMLab. DocILE uses its official download script; the token is hidden from all printed output."),
     ("code", r"""
@@ -479,7 +452,7 @@ prepare_wildreceipt(WR_RAW, DATA, seed=0, threshold=DISTANCE_THRESHOLD)
     ("code", r"""
 if RUN_DOCILE:
     !git clone -q --depth 1 https://github.com/rossumai/docile.git /tmp/docile_repo 2>/dev/null || true
-    !bash /tmp/docile_repo/download_dataset.sh {TOKEN} annotated-trainval data 2>&1 | sed "s/{TOKEN}/***/g" | tail -2
+    !bash /tmp/docile_repo/download_dataset.sh {DOCILE_TOKEN} annotated-trainval data 2>&1 | sed "s/{DOCILE_TOKEN}/***/g" | tail -2
     !mkdir -p {DOCILE_RAW} && unzip -qn data/annotated-trainval.zip -d {DOCILE_RAW}
     prepare_docile(str(DOCILE_RAW), DATA)
 """),
@@ -507,7 +480,7 @@ pd.DataFrame({n: {'documents': r['documents'], 'fields split by reading order': 
     ("md", r"""
 ## 16. Training runs
 
-Each run is described by one `TrainConfig`. Runs whose results already exist are skipped.
+Each run is described by one `TrainConfig`. On an A100, a CORD or WildReceipt run takes about 7 minutes and a DocILE run about 20. A run that already finished in this session is skipped, so the cell can be re-run after an interruption.
 
 | Group | Runs | Question |
 |---|---|---|
@@ -534,12 +507,8 @@ if RUN_DOCILE:
     experiments += [TrainConfig(data='data/docile', eval_splits=['val'], epochs=6, **a) for a in ARMS.values()]
     experiments += [TrainConfig(data='data/docile', eval_splits=['val'], epochs=6, model=m) for m in ('roberta', 'bros')]
 
-todo = [c for c in experiments if not (RUNS / c.run_name() / 'metrics.json').exists()]
-print(f'{len(experiments) - len(todo)} finished, {len(todo)} to train')
-if todo and not torch.cuda.is_available():
-    print('No GPU: training skipped; the results below use the finished runs.')
-else:
-    for cfg in todo:
+for cfg in experiments:
+    if not (RUNS / cfg.run_name() / 'metrics.json').exists():
         train(cfg)
 """),
     ("md", "## 17. Results\n\n### 17.1 F1 (%, average ± spread over seeds)\nFor CORD and WildReceipt, *test* holds new layouts; WildReceipt's *validation* holds familiar ones."),
@@ -549,9 +518,14 @@ results_table(RUNS, 'validation')
 """),
     ("md", "### 17.2 Which documents could skip a person?"),
     ("code", r"""
+routed = {'cord_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0': 'test', 'cord_disjoint_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0': 'test',
+          'wildreceipt_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0': 'test'}
+if RUN_DOCILE:
+    routed['docile_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0'] = 'val'
+for name, split in routed.items():
+    route(RUNS / name, split, target=0.95)
+
 RUN = RUNS / 'cord_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0'
-if not (RUN / 'routing_test' / 'summary.json').exists():
-    route(RUN, 'test', target=0.95)
 display(Image(str(RUN / 'routing_test' / 'risk_coverage.png')))
 pd.DataFrame(json.loads((RUN / 'routing_test' / 'summary.json').read_text())['signals']).T.round(3)
 """),
@@ -577,9 +551,8 @@ if RUN_DOCILE:
 
 | Item | Location |
 |---|---|
-| Code (this notebook is built from it) | github.com/AviDip/doc-extraction, folder `docext/` |
-| Finished runs, logs and reports | same repository, branch `results` |
-| Tests (23, run without internet) | `tests/` |
-| Datasets | CORD (CC BY 4.0), WildReceipt (OpenMMLab), DocILE (token from docile.rossum.ai) |
+| This notebook | github.com/AviDip/doc-extraction |
+| The same code as a package, with tests | branch `source` of that repository |
+| Datasets | CORD (CC BY 4.0, Hugging Face), WildReceipt (OpenMMLab), DocILE (token from docile.rossum.ai) |
 """),
 ]
