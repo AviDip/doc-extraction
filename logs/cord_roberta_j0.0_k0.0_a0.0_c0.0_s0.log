@@ -32,3 +32,8 @@ cord_roberta_j0.0_k0.0_a0.0_c0.0_s0: 800 documents, 4000 steps on cuda
 {'ce': 0.01914, 'arith': 0.007, 'card': 0.03605, 'epoch': 15, 'seconds': 12}
 {'ce': 0.014, 'arith': 0.00177, 'card': 0.03204, 'epoch': 16, 'seconds': 13}
 {'ce': 0.01445, 'arith': 0.00381, 'card': 0.03474, 'epoch': 17, 'seconds': 12}
+{'ce': 0.01131, 'arith': 0.00246, 'card': 0.03056, 'epoch': 18, 'seconds': 12}
+{'ce': 0.00804, 'arith': 0.0012, 'card': 0.03015, 'epoch': 19, 'seconds': 19}
+{'ce': 0.00572, 'arith': 0.00106, 'card': 0.02964, 'epoch': 20, 'seconds': 19}
+validation {"precision": 0.9536961819658814, "recall": 0.9568052159739201, "f1": 0.9552481692432871, "tp": 1174, "fp": 57, "fn": 53, "documents": 100}
+test {"precision": 0.9390708301599391, "recall": 0.9383561643835616, "f1": 0.9387133612485725, "tp": 1233, "fp": 80, "fn": 81, "documents": 100}

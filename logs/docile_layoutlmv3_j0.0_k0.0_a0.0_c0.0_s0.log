@@ -1,0 +1,13 @@
+Loading weights:   0%|          | 0/212 [00:00<?, ?it/s]Loading weights: 100%|██████████| 212/212 [00:00<00:00, 3869.17it/s]
+[transformers] [1mLayoutLMv3ForTokenClassification LOAD REPORT[0m from: microsoft/layoutlmv3-base
+Key                        | Status  | 
+---------------------------+---------+-
+classifier.out_proj.weight | MISSING | 
+classifier.dense.bias      | MISSING | 
+classifier.dense.weight    | MISSING | 
+classifier.out_proj.bias   | MISSING | 
+
+Notes:
+- MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
+docile_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0: 5180 documents, 7770 steps on cuda
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (1294 > 512). Running this sequence through the model will result in indexing errors
