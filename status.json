@@ -66,5 +66,9 @@
   "cord_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s1": {
     "state": "running",
     "rev": 0
+  },
+  "cord_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s2": {
+    "state": "running",
+    "rev": 0
   }
 }
