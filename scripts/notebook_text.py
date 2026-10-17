@@ -95,12 +95,15 @@ RUN_DOCILE = bool(DOCILE_TOKEN)
 
 DATA, RUNS = Path('data'), Path('runs')
 if SAVE_TO_DRIVE:
-    from google.colab import drive
-    drive.mount('/content/drive')
-    saved = Path('/content/drive/MyDrive/doc-extraction/runs')
-    saved.mkdir(parents=True, exist_ok=True)
-    if not RUNS.exists():
-        RUNS.symlink_to(saved)   # 'runs' now points into Drive
+    try:
+        from google.colab import drive
+        drive.mount('/content/drive')   # the Drive of whoever runs the notebook
+        saved = Path('/content/drive/MyDrive/doc-extraction/runs')
+        saved.mkdir(parents=True, exist_ok=True)
+        if not RUNS.exists():
+            RUNS.symlink_to(saved)   # 'runs' now points into Drive
+    except Exception as err:   # access declined, or not on Colab
+        print('Drive not used, so runs are lost if the session ends:', type(err).__name__)
 print(f"DocILE: {'included' if RUN_DOCILE else 'skipped'} · runs saved to: {RUNS.resolve()} · {PARALLEL} runs at a time")
 """
 
