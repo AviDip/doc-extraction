@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PKG = ROOT / "docext"
 sys.path.insert(0, str(Path(__file__).parent))
 
-from notebook_text import INTRO, PART_B, SECTIONS, SETUP, SETUP_CODE, TABLE_HELPER  # noqa: E402
+from notebook_text import INTRO, PART_B, SECTIONS, SETTINGS, SETUP, SETUP_CODE, TABLE_HELPER  # noqa: E402
 
 # functions that would clash once every module shares one namespace
 RENAMES = {
@@ -104,7 +104,7 @@ def cell(kind: str, source: str, tags: list[str] | None = None) -> dict:
 
 
 def build() -> dict:
-    cells = [cell("md", INTRO), cell("md", SETUP), cell("code", SETUP_CODE)]
+    cells = [cell("md", INTRO), cell("md", SETUP), cell("code", SETUP_CODE), cell("code", SETTINGS)]
     seen: dict[str, str] = {}
     for section in SECTIONS:
         module, chunks = section["module"], section["chunks"]

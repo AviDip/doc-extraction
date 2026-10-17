@@ -42,7 +42,9 @@ def test_notebook_runs_end_to_end(notebook_namespace, tmp_path, monkeypatch):
 
     cfg = ns["TrainConfig"](data=str(data), model=models["bros"], out="runs", epochs=2, lr=1e-3,
                              jitter=0.05, key_swap=0.5, lambda_arith=0.3, lambda_card=0.3)
-    run = ns["train"](cfg)
+    ns["train_many"]([cfg], parallel=1)
+    run = Path("runs") / cfg.run_name()
+    assert (run / "metrics.json").exists()
     ns["route"](run, "validation", target=0.5)
     ns["show"](run, "validation", ns["pick"](run, "validation", "riskiest", 1)[0])
     table = ns["results_table"](Path("runs"), "validation")

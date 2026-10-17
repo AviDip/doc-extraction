@@ -18,7 +18,7 @@ This notebook builds and tests two ideas:
 | **Make fewer errors on unfamiliar layouts** | Train with small random changes to the page and wording, and add a check that the extracted amounts add up. |
 | **Find the errors that remain, without labels** | Score each document's risk; send only risky ones to a person. |
 
-**How to run.** Choose a GPU runtime (an A100) and run all cells. Part A builds the code, one small piece at a time; Part B downloads the datasets from their public sources and trains every model. The full run takes about six hours.
+**How to run.** Choose a GPU runtime (an A100) and run all cells. Part A builds the code, one small piece at a time; Part B downloads the datasets from their public sources and trains every model, three at a time. On an A100 the full run takes about two and a half hours, and an interrupted run continues where it stopped.
 
 | | Section |
 |---|---|
@@ -57,15 +57,51 @@ SETUP = r"""
 | `numpy`, `matplotlib`, `pandas` | arrays, figures, tables |
 
 Colab already has `numpy`, `pandas` and `torch`; their versions are kept as they are, so nothing else on Colab breaks.
+
+**Settings** (the second cell below; the defaults suit an A100):
+
+| Setting | Default | Meaning |
+|---|---|---|
+| `SAVE_TO_DRIVE` | `True` | Finished runs are kept in your Google Drive under `doc-extraction/runs`. If the session ends, run all cells again: the data is rebuilt in a few minutes and only unfinished runs are trained. Colab asks once for Drive access. |
+| `PARALLEL` | 3 on an 80 GB GPU, 2 on 40 GB | how many runs share the GPU at once |
+| `DOCILE_TOKEN` | empty | DocILE needs a free token from docile.rossum.ai. Either paste it here, or, better, add it in Colab's **Secrets** panel (key icon on the left) under the name `DOCILE_TOKEN` with *Notebook access* switched on. Without a token, DocILE is skipped and everything else runs. |
 """
 
 SETUP_CODE = r"""
 !pip freeze | grep -iE '^(numpy|pandas|torch|scipy)==' > /tmp/pins.txt
 !pip install -q "transformers>=4.45" "datasets>=2.19" "docile-benchmark>=0.3" scikit-learn matplotlib -c /tmp/pins.txt
 
-import torch
-assert torch.cuda.is_available(), 'Choose a GPU: Runtime → Change runtime type → A100'
-print('GPU:', torch.cuda.get_device_name(0))
+# asked through nvidia-smi: the GPU itself is opened only inside the training processes
+gpu = !nvidia-smi --query-gpu=name,memory.total --format=csv,noheader,nounits
+assert gpu and gpu[0].count(',') == 1, 'Choose a GPU: Runtime → Change runtime type → A100'
+GPU_NAME, GPU_GB = gpu[0].split(',')[0], int(gpu[0].split(',')[1]) / 1024
+print(f'GPU: {GPU_NAME}, {GPU_GB:.0f} GB')
+"""
+
+SETTINGS = r"""
+from pathlib import Path
+
+SAVE_TO_DRIVE = True   # keep finished runs in Google Drive, so a new session continues where the last one stopped
+PARALLEL = 3 if GPU_GB >= 60 else 2 if GPU_GB >= 30 else 1   # runs sharing the GPU at once
+DOCILE_TOKEN = ''      # or leave empty and use the Colab secret DOCILE_TOKEN (keep the token out of any copy you share)
+
+if not DOCILE_TOKEN:
+    try:
+        from google.colab import userdata
+        DOCILE_TOKEN = userdata.get('DOCILE_TOKEN')
+    except Exception as err:  # no such secret, or notebook access not switched on
+        print('No DocILE token:', type(err).__name__)
+RUN_DOCILE = bool(DOCILE_TOKEN)
+
+DATA, RUNS = Path('data'), Path('runs')
+if SAVE_TO_DRIVE:
+    from google.colab import drive
+    drive.mount('/content/drive')
+    saved = Path('/content/drive/MyDrive/doc-extraction/runs')
+    saved.mkdir(parents=True, exist_ok=True)
+    if not RUNS.exists():
+        RUNS.symlink_to(saved)   # 'runs' now points into Drive
+print(f"DocILE: {'included' if RUN_DOCILE else 'skipped'} · runs saved to: {RUNS.resolve()} · {PARALLEL} runs at a time")
 """
 
 SECTIONS = [
@@ -344,6 +380,9 @@ $$\text{loss} = \text{label loss} + \text{ramp} \times (\lambda_1 \cdot \text{su
         "chunks": {
             "AugmentedDocs": "Training documents are varied afresh every time they are read, so the model never sees exactly the same page twice. Fixing the random seed makes each run repeatable.",
             "train": "The training loop. Both rules are measured even when their weight is zero, which shows how well an ordinary model already satisfies them. At the end, predictions for every split are saved and scored. Each run is saved in a folder named after its settings, so runs never overwrite each other.",
+            "is_finished": """**Several runs at once.** One small run keeps the GPU busy only part of the time: between steps it waits while the processor tokenises the next batch, computes the amounts and moves data across. Running three runs side by side fills those gaps, so all of them finish in about half the time they would take one after another.
+
+Each run gets its own process, a copy of this notebook's memory made just before the run starts, so the runs cannot disturb each other, and when one ends all its GPU memory is released. A run counts as finished once its `metrics.json` exists. Calling `train_many` again with the same list therefore trains only what is missing: after an interruption, nothing is repeated.""",
         },
     },
     {
@@ -420,24 +459,7 @@ PART_B = [
 
 ## 15. Data, layout check and label check
 
-DocILE needs a free token from docile.rossum.ai. Put it in `DOCILE_TOKEN` below, or in Colab's **Secrets** panel (key icon on the left) under the name `DOCILE_TOKEN`. Without a token, DocILE is skipped and everything else runs.
-"""),
-    ("code", r"""
-from pathlib import Path
-
-DOCILE_TOKEN = ''   # your DocILE token (keep it out of any copy you share)
-
-DATA, RUNS = Path('data'), Path('runs')
-DOCILE_RAW = Path('/content/docile_raw')
-
-if not DOCILE_TOKEN:
-    try:
-        from google.colab import userdata
-        DOCILE_TOKEN = userdata.get('DOCILE_TOKEN')
-    except Exception:  # no secret set
-        pass
-RUN_DOCILE = bool(DOCILE_TOKEN)
-print('DocILE:', 'included' if RUN_DOCILE else 'skipped (no token)')
+The datasets are downloaded and converted in each new session; this takes a few minutes. Finished training runs are kept (see the settings in Setup).
 """),
     ("md", "### 15.1 Downloading the data\nCORD comes from Hugging Face and WildReceipt from OpenMMLab. DocILE uses its official download script; the token is hidden from all printed output."),
     ("code", r"""
@@ -450,6 +472,7 @@ WR_RAW = next(Path('data/wildreceipt_raw').rglob('class_list.txt')).parent
 prepare_wildreceipt(WR_RAW, DATA, seed=0, threshold=DISTANCE_THRESHOLD)
 """),
     ("code", r"""
+DOCILE_RAW = Path('/content/docile_raw')   # also needed later by the official scorer
 if RUN_DOCILE:
     !git clone -q --depth 1 https://github.com/rossumai/docile.git /tmp/docile_repo 2>/dev/null || true
     !bash /tmp/docile_repo/download_dataset.sh {DOCILE_TOKEN} annotated-trainval data 2>&1 | sed "s/{DOCILE_TOKEN}/***/g" | tail -2
@@ -480,7 +503,7 @@ pd.DataFrame({n: {'documents': r['documents'], 'fields split by reading order': 
     ("md", r"""
 ## 16. Training runs
 
-Each run is described by one `TrainConfig`. On an A100, a CORD or WildReceipt run takes about 7 minutes and a DocILE run about 20. A run that already finished in this session is skipped, so the cell can be re-run after an interruption.
+Each run is described by one `TrainConfig`. On an A100, with three runs at a time, all of them take about two and a half hours. Runs found finished in `runs/` are skipped, so after an interruption the cell continues where it stopped. The longest runs (DocILE) start first, so the short ones fill the gaps at the end. One line is printed per finished run; the full output of each run is in its `train.log`.
 
 | Group | Runs | Question |
 |---|---|---|
@@ -496,20 +519,19 @@ BEST = dict(jitter=0.05, key_swap=0.5, lambda_arith=0.1, lambda_card=0.1)   # be
 ARMS = {'baseline': {}, 'jitter': {'jitter': BEST['jitter']}, 'key_swap': {'key_swap': BEST['key_swap']},
         'rules': {'lambda_arith': BEST['lambda_arith'], 'lambda_card': BEST['lambda_card']}, 'all': BEST}
 
-experiments = [TrainConfig(data='data/cord', eval_splits=CORD, seed=s) for s in (0, 1, 2)]
+experiments = []
+if RUN_DOCILE:
+    experiments += [TrainConfig(data='data/docile', eval_splits=['val'], epochs=6, **a) for a in ARMS.values()]
+    experiments += [TrainConfig(data='data/docile', eval_splits=['val'], epochs=6, model=m) for m in ('roberta', 'bros')]
+experiments += [TrainConfig(data='data/cord', eval_splits=CORD, seed=s) for s in (0, 1, 2)]
 experiments += [TrainConfig(data='data/cord', eval_splits=CORD, model=m) for m in ('roberta', 'bros')]
 experiments += [TrainConfig(data='data/cord_disjoint', eval_splits=CORD, seed=s) for s in (0, 1, 2)]
 experiments += [TrainConfig(data='data/cord_disjoint', eval_splits=CORD, jitter=j) for j in (0.01, 0.03, 0.05, 0.1)]
 experiments += [TrainConfig(data='data/cord_disjoint', eval_splits=CORD, key_swap=0.5)]
 experiments += [TrainConfig(data='data/cord_disjoint', eval_splits=CORD, lambda_arith=w, lambda_card=w) for w in (0.1, 0.3, 1.0)]
 experiments += [TrainConfig(data='data/wildreceipt', eval_splits=WR, seed=s, **a) for a in ARMS.values() for s in (0, 1, 2)]
-if RUN_DOCILE:
-    experiments += [TrainConfig(data='data/docile', eval_splits=['val'], epochs=6, **a) for a in ARMS.values()]
-    experiments += [TrainConfig(data='data/docile', eval_splits=['val'], epochs=6, model=m) for m in ('roberta', 'bros')]
 
-for cfg in experiments:
-    if not (RUNS / cfg.run_name() / 'metrics.json').exists():
-        train(cfg)
+train_many(experiments, PARALLEL)
 """),
     ("md", "## 17. Results\n\n### 17.1 F1 (%, average ± spread over seeds)\nFor CORD and WildReceipt, *test* holds new layouts; WildReceipt's *validation* holds familiar ones."),
     ("code", r"""

@@ -169,6 +169,22 @@ def test_train_evaluate_route_end_to_end(offline):
     assert (run / "routing_validation" / "risk_coverage.png").exists()
 
 
+def test_train_many_runs_in_parallel_and_resumes(offline, capsys):
+    from docext.train import TrainConfig, is_finished, train_many
+
+    data, models, root = offline
+    out = str(root / "runs_many")
+    good = [TrainConfig(data=str(data), model=models[m], out=out, epochs=1, lr=1e-3) for m in ("roberta", "bros")]
+    broken = TrainConfig(data=str(root / "missing"), model=models["bros"], out=out, epochs=1)
+    train_many([*good, broken], parallel=2)
+    printed = capsys.readouterr().out
+    assert all(is_finished(c) for c in good) and not is_finished(broken)
+    assert printed.count("done ") == 2 and "FAILED" in printed
+
+    train_many(good, parallel=2)  # nothing left to train
+    assert "2 of 2 runs already finished; 0 to train" in capsys.readouterr().out
+
+
 def test_wildreceipt_record():
     from docext.data.wildreceipt import field_types, parse_record
 

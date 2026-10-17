@@ -10,10 +10,15 @@ without a GPU.
 from __future__ import annotations
 
 import argparse
+import contextlib
 import json
+import multiprocessing
+import os
 import random
 import time
+import traceback
 from dataclasses import asdict, dataclass, field, fields
+from multiprocessing.connection import wait
 from pathlib import Path
 
 import numpy as np
@@ -112,7 +117,9 @@ def train(cfg: TrainConfig) -> Path:
     )
 
     total_steps = cfg.epochs * len(loader)
-    optimizer = torch.optim.AdamW(model.parameters(), lr=cfg.lr, weight_decay=WEIGHT_DECAY)
+    optimizer = torch.optim.AdamW(
+        model.parameters(), lr=cfg.lr, weight_decay=WEIGHT_DECAY, fused=device.type == "cuda"
+    )
     scheduler = get_linear_schedule_with_warmup(optimizer, int(WARMUP_SHARE * total_steps), total_steps)
     scaler = torch.amp.GradScaler(enabled=amp_dtype(device) == torch.float16)
 
@@ -180,6 +187,70 @@ def train(cfg: TrainConfig) -> Path:
             print(split, json.dumps(metrics[split]["all"]))
     (run_dir / "metrics.json").write_text(json.dumps(metrics, indent=2))
     return run_dir
+
+
+# ------------------------------------------------------ several runs at once
+
+
+def is_finished(cfg: TrainConfig) -> bool:
+    return (Path(cfg.out) / cfg.run_name() / "metrics.json").exists()
+
+
+def _train_logged(cfg: TrainConfig) -> None:
+    """Train in a child process, writing everything it prints to train.log."""
+    # the parent's processor thread pool is not copied into the child; with one
+    # thread, the child never waits for threads that do not exist
+    torch.set_num_threads(1)
+    run_dir = Path(cfg.out) / cfg.run_name()
+    run_dir.mkdir(parents=True, exist_ok=True)
+    with open(run_dir / "train.log", "w") as log, contextlib.redirect_stdout(log), contextlib.redirect_stderr(log):
+        try:
+            train(cfg)
+        except BaseException:
+            traceback.print_exc()
+            raise SystemExit(1)
+
+
+def _report(cfg: TrainConfig, ok: bool, minutes: float) -> str:
+    run_dir = Path(cfg.out) / cfg.run_name()
+    if not ok:
+        tail = (run_dir / "train.log").read_text(errors="replace").splitlines()[-5:]
+        return f"FAILED  {run_dir.name} after {minutes:.1f} min\n    " + "\n    ".join(tail)
+    metrics = json.loads((run_dir / "metrics.json").read_text())
+    scores = "  ".join(f"{split} F1 {100 * m['all']['f1']:.1f}" for split, m in metrics.items())
+    return f"done    {run_dir.name}  {minutes:.1f} min  {scores}"
+
+
+def train_many(configs: list[TrainConfig], parallel: int = 1) -> None:
+    """Train every unfinished run, `parallel` at a time, each in its own process.
+
+    Runs share the GPU: while one waits for the processor to prepare its next
+    batch, another computes. A run counts as finished once its metrics.json
+    exists, so calling this again continues where an interrupted call stopped.
+    """
+    if torch.cuda.is_initialized():  # a forked process cannot use a GPU its parent has opened
+        raise RuntimeError("the GPU is already in use by this notebook; restart the runtime and run all cells")
+    todo = [c for c in configs if not is_finished(c)]
+    print(f"{len(configs) - len(todo)} of {len(configs)} runs already finished; "
+          f"{len(todo)} to train, {parallel} at a time")
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"  # tokenizer threads do not survive a fork
+    fork = multiprocessing.get_context("fork")
+    running: dict = {}  # process -> (config, start time)
+    try:
+        while todo or running:
+            while todo and len(running) < parallel:
+                cfg = todo.pop(0)
+                process = fork.Process(target=_train_logged, args=(cfg,))
+                process.start()
+                running[process] = (cfg, time.time())
+            finished = wait([p.sentinel for p in running])
+            for process in [p for p in running if p.sentinel in finished]:
+                process.join()
+                cfg, began = running.pop(process)
+                print(_report(cfg, process.exitcode == 0, (time.time() - began) / 60), flush=True)
+    finally:  # stopping the cell also stops the runs in progress
+        for process in running:
+            process.terminate()
 
 
 def parse_args() -> TrainConfig:
