@@ -1,0 +1,75 @@
+{
+  "split": "data/cord/train.pkl",
+  "documents": 800,
+  "words_per_document": {
+    "mean": 24.20875,
+    "p95": 53.0
+  },
+  "fields": 10947,
+  "fragmented_fields_share": 0.007947382844614962,
+  "equations": {
+    "items=subtotal": {
+      "applicable_docs": 526,
+      "satisfied_share": 0.8973384030418251,
+      "satisfied_share_text_parse": 0.8973384030418251
+    },
+    "items+tax+service=total": {
+      "applicable_docs": 776,
+      "satisfied_share": 0.8762886597938144,
+      "satisfied_share_text_parse": 0.8762886597938144
+    },
+    "subtotal+tax+service=total": {
+      "applicable_docs": 520,
+      "satisfied_share": 0.9230769230769231,
+      "satisfied_share_text_parse": 0.9211538461538461
+    }
+  },
+  "docs_with_any_satisfied_equation": 758,
+  "singleton_fields": [
+    "menu.itemsubtotal",
+    "menu.vatyn",
+    "sub_total.discount_price",
+    "sub_total.service_price",
+    "sub_total.subtotal_price",
+    "sub_total.tax_price",
+    "total.cashprice",
+    "total.changeprice",
+    "total.creditcardprice",
+    "total.emoneyprice",
+    "total.menuqty_cnt",
+    "total.menutype_cnt",
+    "total.total_etc",
+    "total.total_price",
+    "void_menu.nm",
+    "void_menu.price"
+  ],
+  "key_phrases_per_field": {
+    "menu.cnt": 1,
+    "menu.discountprice": 5,
+    "menu.nm": 4,
+    "menu.price": 2,
+    "menu.sub.price": 0,
+    "menu.unitprice": 0,
+    "sub_total.discount_price": 7,
+    "sub_total.etc": 16,
+    "sub_total.othersvc_price": 0,
+    "sub_total.service_price": 7,
+    "sub_total.subtotal_price": 23,
+    "sub_total.tax_price": 14,
+    "total.cashprice": 22,
+    "total.changeprice": 20,
+    "total.creditcardprice": 22,
+    "total.emoneyprice": 9,
+    "total.menuqty_cnt": 15,
+    "total.menutype_cnt": 5,
+    "total.total_etc": 5,
+    "total.total_price": 28
+  },
+  "tokens": {
+    "model": "layoutlmv3",
+    "mean": 56.83375,
+    "p95": 124.04999999999995,
+    "longer_than_one_window": 0.0,
+    "mean_windows": 1.0
+  }
+}
