@@ -6,5 +6,9 @@
   "wr-data": {
     "state": "running",
     "rev": 0
+  },
+  "docile-data": {
+    "state": "running",
+    "rev": 0
   }
 }
