@@ -34,6 +34,7 @@ Two questions, one pipeline:
 | `routing.py` | CLI: novelty, MSP, Mahalanobis and consistency signals; risk–coverage |
 | `summarise.py` | CLI: mean ± std over seeds |
 | `hub.py` | CLI: push / pull results to a Hugging Face dataset repo |
+| `runner.py` | CLI: runs `jobs.json` on a GPU machine and publishes results to the `results` branch |
 
 ## Setup
 
@@ -51,6 +52,13 @@ DocILE (optional) needs a free token from <https://docile.rossum.ai>, then:
 git clone --depth 1 https://github.com/rossumai/docile.git
 bash docile/download_dataset.sh $DOCILE_TOKEN labeled-trainval data/docile_raw --unzip
 ```
+
+## Automatic mode
+
+`jobs.json` lists every experiment with its dependencies. `python -m docext.runner --repo AviDip/doc-extraction`
+(started from the notebook's first two cells) pulls new code and jobs every minute, runs whatever is ready, and
+pushes logs, run folders and `status.json` to the `results` branch after each job. Only `python -m docext.*` and
+`bash scripts/*` commands are allowed. Raising a job's `rev` reruns it.
 
 ## Workflow
 
