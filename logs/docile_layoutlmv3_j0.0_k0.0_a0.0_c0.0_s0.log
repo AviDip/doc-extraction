@@ -17,3 +17,4 @@ docile_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0: 5180 documents, 7770 steps on cuda
 {'ce': 0.28977, 'arith': 0.40208, 'card': 0.00053, 'epoch': 2, 'seconds': 167}
 {'ce': 0.21388, 'arith': 0.3955, 'card': 0.00085, 'epoch': 3, 'seconds': 126}
 {'ce': 0.17065, 'arith': 0.29965, 'card': 0.00155, 'epoch': 4, 'seconds': 126}
+{'ce': 0.14207, 'arith': 0.25179, 'card': 0.00213, 'epoch': 5, 'seconds': 126}
