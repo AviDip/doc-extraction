@@ -260,6 +260,203 @@
     "wr-data-v2"
    ],
    "rev": 1
+  },
+  {
+   "id": "docile_layoutlmv3_j0.05_k0.0_a0.0_c0.0_s0",
+   "cmd": "python -m docext.train --data data/docile --eval-splits val --epochs 6 --jitter 0.05",
+   "needs": [
+    "docile-data"
+   ]
+  },
+  {
+   "id": "docile_layoutlmv3_j0.0_k0.5_a0.0_c0.0_s0",
+   "cmd": "python -m docext.train --data data/docile --eval-splits val --epochs 6 --key-swap 0.5",
+   "needs": [
+    "docile-data"
+   ]
+  },
+  {
+   "id": "docile_layoutlmv3_j0.0_k0.0_a0.1_c0.1_s0",
+   "cmd": "python -m docext.train --data data/docile --eval-splits val --epochs 6 --lambda-arith 0.1 --lambda-card 0.1",
+   "needs": [
+    "docile-data"
+   ]
+  },
+  {
+   "id": "docile_layoutlmv3_j0.05_k0.5_a0.1_c0.1_s0",
+   "cmd": "python -m docext.train --data data/docile --eval-splits val --epochs 6 --jitter 0.05 --key-swap 0.5 --lambda-arith 0.1 --lambda-card 0.1",
+   "needs": [
+    "docile-data"
+   ]
+  },
+  {
+   "id": "docile_roberta_j0.0_k0.0_a0.0_c0.0_s0",
+   "cmd": "python -m docext.train --data data/docile --eval-splits val --epochs 6 --model roberta",
+   "needs": [
+    "docile-data"
+   ]
+  },
+  {
+   "id": "docile_bros_j0.0_k0.0_a0.0_c0.0_s0",
+   "cmd": "python -m docext.train --data data/docile --eval-splits val --epochs 6 --model bros",
+   "needs": [
+    "docile-data"
+   ]
+  },
+  {
+   "id": "wildreceipt_layoutlmv3_j0.05_k0.0_a0.0_c0.0_s0",
+   "cmd": "python -m docext.train --data data/wildreceipt --eval-splits validation test --seed 0 --jitter 0.05",
+   "needs": [
+    "wr-data-v2"
+   ]
+  },
+  {
+   "id": "wildreceipt_layoutlmv3_j0.05_k0.0_a0.0_c0.0_s1",
+   "cmd": "python -m docext.train --data data/wildreceipt --eval-splits validation test --seed 1 --jitter 0.05",
+   "needs": [
+    "wr-data-v2"
+   ]
+  },
+  {
+   "id": "wildreceipt_layoutlmv3_j0.05_k0.0_a0.0_c0.0_s2",
+   "cmd": "python -m docext.train --data data/wildreceipt --eval-splits validation test --seed 2 --jitter 0.05",
+   "needs": [
+    "wr-data-v2"
+   ]
+  },
+  {
+   "id": "wildreceipt_layoutlmv3_j0.0_k0.5_a0.0_c0.0_s0",
+   "cmd": "python -m docext.train --data data/wildreceipt --eval-splits validation test --seed 0 --key-swap 0.5",
+   "needs": [
+    "wr-data-v2"
+   ]
+  },
+  {
+   "id": "wildreceipt_layoutlmv3_j0.0_k0.5_a0.0_c0.0_s1",
+   "cmd": "python -m docext.train --data data/wildreceipt --eval-splits validation test --seed 1 --key-swap 0.5",
+   "needs": [
+    "wr-data-v2"
+   ]
+  },
+  {
+   "id": "wildreceipt_layoutlmv3_j0.0_k0.5_a0.0_c0.0_s2",
+   "cmd": "python -m docext.train --data data/wildreceipt --eval-splits validation test --seed 2 --key-swap 0.5",
+   "needs": [
+    "wr-data-v2"
+   ]
+  },
+  {
+   "id": "wildreceipt_layoutlmv3_j0.0_k0.0_a0.1_c0.1_s0",
+   "cmd": "python -m docext.train --data data/wildreceipt --eval-splits validation test --seed 0 --lambda-arith 0.1 --lambda-card 0.1",
+   "needs": [
+    "wr-data-v2"
+   ]
+  },
+  {
+   "id": "wildreceipt_layoutlmv3_j0.0_k0.0_a0.1_c0.1_s1",
+   "cmd": "python -m docext.train --data data/wildreceipt --eval-splits validation test --seed 1 --lambda-arith 0.1 --lambda-card 0.1",
+   "needs": [
+    "wr-data-v2"
+   ]
+  },
+  {
+   "id": "wildreceipt_layoutlmv3_j0.0_k0.0_a0.1_c0.1_s2",
+   "cmd": "python -m docext.train --data data/wildreceipt --eval-splits validation test --seed 2 --lambda-arith 0.1 --lambda-card 0.1",
+   "needs": [
+    "wr-data-v2"
+   ]
+  },
+  {
+   "id": "wildreceipt_layoutlmv3_j0.05_k0.5_a0.1_c0.1_s0",
+   "cmd": "python -m docext.train --data data/wildreceipt --eval-splits validation test --seed 0 --jitter 0.05 --key-swap 0.5 --lambda-arith 0.1 --lambda-card 0.1",
+   "needs": [
+    "wr-data-v2"
+   ]
+  },
+  {
+   "id": "wildreceipt_layoutlmv3_j0.05_k0.5_a0.1_c0.1_s1",
+   "cmd": "python -m docext.train --data data/wildreceipt --eval-splits validation test --seed 1 --jitter 0.05 --key-swap 0.5 --lambda-arith 0.1 --lambda-card 0.1",
+   "needs": [
+    "wr-data-v2"
+   ]
+  },
+  {
+   "id": "wildreceipt_layoutlmv3_j0.05_k0.5_a0.1_c0.1_s2",
+   "cmd": "python -m docext.train --data data/wildreceipt --eval-splits validation test --seed 2 --jitter 0.05 --key-swap 0.5 --lambda-arith 0.1 --lambda-card 0.1",
+   "needs": [
+    "wr-data-v2"
+   ]
+  },
+  {
+   "id": "route-docile_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0",
+   "cmd": "python -m docext.routing runs/docile_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0 --split val --target 0.9",
+   "needs": [
+    "docile_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0"
+   ]
+  },
+  {
+   "id": "route-wildreceipt_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0-v2",
+   "cmd": "python -m docext.routing runs/wildreceipt_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0 --split test --target 0.95",
+   "needs": [
+    "wildreceipt_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0",
+    "wr-data-v2"
+   ]
+  },
+  {
+   "id": "route-cord_disjoint_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0",
+   "cmd": "python -m docext.routing runs/cord_disjoint_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0 --split test --target 0.95",
+   "needs": [
+    "cord_disjoint_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0"
+   ]
+  },
+  {
+   "id": "official-docile_layoutlmv3_j0.05_k0.0_a0.0_c0.0_s0",
+   "cmd": "python -m docext.evaluate runs/docile_layoutlmv3_j0.05_k0.0_a0.0_c0.0_s0 --docile-path /content/docile_raw",
+   "needs": [
+    "docile_layoutlmv3_j0.05_k0.0_a0.0_c0.0_s0"
+   ]
+  },
+  {
+   "id": "official-docile_layoutlmv3_j0.0_k0.5_a0.0_c0.0_s0",
+   "cmd": "python -m docext.evaluate runs/docile_layoutlmv3_j0.0_k0.5_a0.0_c0.0_s0 --docile-path /content/docile_raw",
+   "needs": [
+    "docile_layoutlmv3_j0.0_k0.5_a0.0_c0.0_s0"
+   ]
+  },
+  {
+   "id": "official-docile_layoutlmv3_j0.0_k0.0_a0.1_c0.1_s0",
+   "cmd": "python -m docext.evaluate runs/docile_layoutlmv3_j0.0_k0.0_a0.1_c0.1_s0 --docile-path /content/docile_raw",
+   "needs": [
+    "docile_layoutlmv3_j0.0_k0.0_a0.1_c0.1_s0"
+   ]
+  },
+  {
+   "id": "official-docile_layoutlmv3_j0.05_k0.5_a0.1_c0.1_s0",
+   "cmd": "python -m docext.evaluate runs/docile_layoutlmv3_j0.05_k0.5_a0.1_c0.1_s0 --docile-path /content/docile_raw",
+   "needs": [
+    "docile_layoutlmv3_j0.05_k0.5_a0.1_c0.1_s0"
+   ]
+  },
+  {
+   "id": "official-docile_roberta_j0.0_k0.0_a0.0_c0.0_s0",
+   "cmd": "python -m docext.evaluate runs/docile_roberta_j0.0_k0.0_a0.0_c0.0_s0 --docile-path /content/docile_raw",
+   "needs": [
+    "docile_roberta_j0.0_k0.0_a0.0_c0.0_s0"
+   ]
+  },
+  {
+   "id": "official-docile_bros_j0.0_k0.0_a0.0_c0.0_s0",
+   "cmd": "python -m docext.evaluate runs/docile_bros_j0.0_k0.0_a0.0_c0.0_s0 --docile-path /content/docile_raw",
+   "needs": [
+    "docile_bros_j0.0_k0.0_a0.0_c0.0_s0"
+   ]
+  },
+  {
+   "id": "official-docile_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0",
+   "cmd": "python -m docext.evaluate runs/docile_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0 --docile-path /content/docile_raw",
+   "needs": [
+    "docile_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0"
+   ]
   }
  ]
 }
