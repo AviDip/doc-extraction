@@ -24,3 +24,11 @@ cord_disjoint_layoutlmv3_j0.05_k0.0_a0.0_c0.0_s0: 800 documents, 4000 steps on c
 {'ce': 0.04531, 'arith': 0.0151, 'card': 0.04274, 'epoch': 12, 'seconds': 16}
 {'ce': 0.04054, 'arith': 0.0107, 'card': 0.03979, 'epoch': 13, 'seconds': 16}
 {'ce': 0.03198, 'arith': 0.00902, 'card': 0.03795, 'epoch': 14, 'seconds': 16}
+{'ce': 0.0242, 'arith': 0.0044, 'card': 0.03082, 'epoch': 15, 'seconds': 17}
+{'ce': 0.01827, 'arith': 0.00291, 'card': 0.02537, 'epoch': 16, 'seconds': 18}
+{'ce': 0.01829, 'arith': 0.00466, 'card': 0.02724, 'epoch': 17, 'seconds': 18}
+{'ce': 0.01436, 'arith': 0.00157, 'card': 0.02668, 'epoch': 18, 'seconds': 18}
+{'ce': 0.01337, 'arith': 0.00271, 'card': 0.02653, 'epoch': 19, 'seconds': 18}
+{'ce': 0.01073, 'arith': 0.00061, 'card': 0.02367, 'epoch': 20, 'seconds': 18}
+validation {"precision": 0.9416666666666667, "recall": 0.9459665144596652, "f1": 0.9438116932422171, "tp": 1243, "fp": 77, "fn": 71, "documents": 100}
+test {"precision": 0.9252772913018097, "recall": 0.9362079149438866, "f1": 0.9307105108631826, "tp": 1585, "fp": 128, "fn": 108, "documents": 100}
