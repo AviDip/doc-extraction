@@ -419,25 +419,54 @@ PART_B = [
 
 ## 15. Data, layout check and label check
 
-| Setting | Meaning |
+Part B decides by itself what to do:
+
+| Situation | What happens |
 |---|---|
-| `USE_PUBLISHED_RESULTS` | `True`: reuse finished runs from the project's GitHub repository; no GPU needed. `False`: train everything again (on an A100, about 7 minutes per CORD or WildReceipt run, 20 per DocILE run). |
-| `RUN_DOCILE` | DocILE needs a free personal token from docile.rossum.ai. |
+| Finished runs exist in the project's GitHub repository (`results` branch) | they are reused; no account is needed |
+| A GPU is available | any run not yet finished is trained |
+| No GPU | training is skipped and the finished runs are used |
+| A DocILE token is found | DocILE is downloaded and included; otherwise it is skipped |
+
+**The DocILE token** (free, from docile.rossum.ai) is read from, in order: the `DOCILE_TOKEN` setting below, Colab's **Secrets** panel (the key icon on the left; add a secret named `DOCILE_TOKEN`), or a file `docile_token.txt` uploaded next to the notebook. Keep the token out of any copy you share.
 """),
     ("code", r"""
+import os
 from pathlib import Path
 
-DATA, RUNS = Path('data'), Path('runs')
-USE_PUBLISHED_RESULTS = True
-RUN_DOCILE = False
-DOCILE_RAW = Path('/content/docile_raw')
+DOCILE_TOKEN = ''   # optional: paste your DocILE token here (in your own copy only)
 
-if USE_PUBLISHED_RESULTS:
-    !rm -rf /tmp/published && git clone -q --depth 1 --branch results https://github.com/AviDip/doc-extraction /tmp/published
-    !mkdir -p runs data && cp -rn /tmp/published/runs/. runs/ && cp -rn /tmp/published/data/. data/
-    print(len(list(RUNS.glob('*/metrics.json'))), 'finished runs reused')
+DATA, RUNS = Path('data'), Path('runs')
+DOCILE_RAW = Path('/content/docile_raw')
+HAS_GPU = torch.cuda.is_available()
+
+
+def find_docile_token() -> str | None:
+    if DOCILE_TOKEN.strip():
+        return DOCILE_TOKEN.strip()
+    try:
+        from google.colab import userdata
+        return userdata.get('DOCILE_TOKEN')
+    except Exception:  # not on Colab, or no such secret
+        pass
+    if os.environ.get('DOCILE_TOKEN'):
+        return os.environ['DOCILE_TOKEN']
+    for file in (Path('docile_token.txt'), Path('/content/docile_token.txt')):
+        if file.exists():
+            return file.read_text().strip()
+    return None
+
+
+TOKEN = find_docile_token()
+RUN_DOCILE = bool(TOKEN)
+print(f"GPU: {'yes' if HAS_GPU else 'no'} · DocILE: {'included' if RUN_DOCILE else 'skipped (no token found)'}")
+
+# finished runs from the project's public results branch
+!rm -rf /tmp/published && git clone -q --depth 1 --branch results https://github.com/AviDip/doc-extraction /tmp/published
+!mkdir -p runs data && cp -rn /tmp/published/runs/. runs/ && cp -rn /tmp/published/data/. data/
+print(len(list(RUNS.glob('*/metrics.json'))), 'finished runs reused')
 """),
-    ("md", "### 15.1 Downloading the data\nCORD comes from Hugging Face and WildReceipt from OpenMMLab. DocILE uses its official download script with your token, typed into a hidden box and never saved."),
+    ("md", "### 15.1 Downloading the data\nCORD comes from Hugging Face and WildReceipt from OpenMMLab. DocILE uses its official download script; the token is hidden from all printed output."),
     ("code", r"""
 prepare_cord(DATA)
 prepare_cord_disjoint(DATA, seed=0, threshold=0.7)   # a looser threshold, so one shop rarely ends up on both sides
@@ -449,10 +478,8 @@ prepare_wildreceipt(WR_RAW, DATA, seed=0, threshold=DISTANCE_THRESHOLD)
 """),
     ("code", r"""
 if RUN_DOCILE:
-    from getpass import getpass
-    token = getpass('DocILE token: ')
-    !git clone -q --depth 1 https://github.com/rossumai/docile.git /tmp/docile_repo
-    !bash /tmp/docile_repo/download_dataset.sh {token} annotated-trainval data 2>&1 | sed "s/{token}/***/g"
+    !git clone -q --depth 1 https://github.com/rossumai/docile.git /tmp/docile_repo 2>/dev/null || true
+    !bash /tmp/docile_repo/download_dataset.sh {TOKEN} annotated-trainval data 2>&1 | sed "s/{TOKEN}/***/g" | tail -2
     !mkdir -p {DOCILE_RAW} && unzip -qn data/annotated-trainval.zip -d {DOCILE_RAW}
     prepare_docile(str(DOCILE_RAW), DATA)
 """),
@@ -488,11 +515,11 @@ Each run is described by one `TrainConfig`. Runs whose results already exist are
 | CORD, other models | RoBERTa, BROS | does the kind of layout knowledge matter? |
 | CORD, no shared layouts | 3 seeds; jitter 1–10%; key swap; rule weights 0.1, 0.3, 1.0 | choosing settings on new layouts |
 | WildReceipt | each method, 3 seeds | main results |
-| DocILE | each method | larger scale, official scorer |
+| DocILE | each method; RoBERTa and BROS | larger scale, official scorer |
 """),
     ("code", r"""
 CORD, WR = ['validation', 'test'], ['validation', 'test']
-BEST = dict(jitter=0.05, key_swap=0.5, lambda_arith=0.3, lambda_card=0.3)   # chosen on CORD validation (no shared layouts)
+BEST = dict(jitter=0.05, key_swap=0.5, lambda_arith=0.1, lambda_card=0.1)   # best of each on CORD validation, new layouts
 ARMS = {'baseline': {}, 'jitter': {'jitter': BEST['jitter']}, 'key_swap': {'key_swap': BEST['key_swap']},
         'rules': {'lambda_arith': BEST['lambda_arith'], 'lambda_card': BEST['lambda_card']}, 'all': BEST}
 
@@ -505,6 +532,7 @@ experiments += [TrainConfig(data='data/cord_disjoint', eval_splits=CORD, lambda_
 experiments += [TrainConfig(data='data/wildreceipt', eval_splits=WR, seed=s, **a) for a in ARMS.values() for s in (0, 1, 2)]
 if RUN_DOCILE:
     experiments += [TrainConfig(data='data/docile', eval_splits=['val'], epochs=6, **a) for a in ARMS.values()]
+    experiments += [TrainConfig(data='data/docile', eval_splits=['val'], epochs=6, model=m) for m in ('roberta', 'bros')]
 
 todo = [c for c in experiments if not (RUNS / c.run_name() / 'metrics.json').exists()]
 print(f'{len(experiments) - len(todo)} finished, {len(todo)} to train')
@@ -526,6 +554,13 @@ if not (RUN / 'routing_test' / 'summary.json').exists():
     route(RUN, 'test', target=0.95)
 display(Image(str(RUN / 'routing_test' / 'risk_coverage.png')))
 pd.DataFrame(json.loads((RUN / 'routing_test' / 'summary.json').read_text())['signals']).T.round(3)
+"""),
+    ("code", r"""
+coverage = {run.parent.parent.name + ' · ' + run.parent.name.removeprefix('routing_'):
+            {k: v['coverage_at_target'] for k, v in json.loads(run.read_text())['signals'].items()}
+            for run in sorted(RUNS.glob('*/routing_*/summary.json'))}
+print('Share of documents that can skip a person while F1 stays at the target:')
+pd.DataFrame(coverage).T.style.format('{:.0%}')
 """),
     ("md", "### 17.3 Two documents up close\nThe riskiest document by the Mahalanobis score, then the safest."),
     ("code", "show(RUN, 'test', pick(RUN, 'test', 'riskiest', 1)[0])"),
