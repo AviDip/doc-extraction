@@ -1,6 +1,6 @@
 # Making Document Extraction Worth Automating
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/AviDip/doc-extraction/blob/main/colab.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/AviDip/doc-extraction/blob/main/colab.ipynb) experiments · [![Demo](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/AviDip/doc-extraction/blob/main/demo.ipynb) demo (CPU, ~5 min)
 
 Code for the PAI-ML 2 project: structural consistency training and layout-novelty routing for key
 information extraction on CORD, WildReceipt and (optionally) DocILE.
@@ -34,6 +34,7 @@ Two questions, one pipeline:
 | `routing.py` | CLI: novelty, MSP, Mahalanobis and consistency signals; risk–coverage |
 | `summarise.py` | CLI: mean ± std over seeds |
 | `hub.py` | CLI: push / pull results to a Hugging Face dataset repo |
+| `demo.py` | one document's extraction, checks, risk score and routing decision (used by `demo.ipynb`) |
 | `runner.py` | CLI: runs `jobs.json` on a GPU machine and publishes results to the `results` branch |
 
 ## Setup
