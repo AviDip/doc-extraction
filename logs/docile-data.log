@@ -1,0 +1,5 @@
+Downloading https://docile-dataset-rossum.s3.eu-west-1.amazonaws.com/***/labeled-trainval.zip
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   320    0   320    0     0   3145      0 --:--:-- --:--:-- --:--:--  3168
+Unexpected size of downloaded labeled-trainval.zip, perhaps token '***' or dataset name 'labeled-trainval' is wrong
