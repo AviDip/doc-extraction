@@ -118,8 +118,10 @@
     "minutes": 1.1
   },
   "eval-cord_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0": {
-    "state": "running",
-    "rev": 0
+    "state": "done",
+    "rev": 0,
+    "returncode": 0,
+    "minutes": 1.1
   },
   "eval-cord_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s1": {
     "state": "running",
