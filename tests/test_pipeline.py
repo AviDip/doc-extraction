@@ -113,6 +113,18 @@ def test_risk_coverage_handles_ties():
     assert curve[:, 0].tolist() == pytest.approx([2 / 3, 1.0])  # tied documents enter together
 
 
+def test_fixed_cutoff_chosen_on_one_set_applied_to_another():
+    from docext.routing import cutoff, fixed_cutoff
+
+    # three documents: two perfect, one with errors; risk ranks them correctly
+    counts = np.array([[5, 0, 0], [5, 0, 0], [1, 4, 4]], dtype=float)
+    risk = np.array([0.1, 0.2, 0.9])
+    assert cutoff(risk, counts, 0.95) == 0.2 and cutoff(risk + 1, counts[::-1], 0.95) == -np.inf
+    signals = {name: risk for name in ("novelty", "msp", "mahalanobis", "consistency")} | {"counts": counts}
+    report = fixed_cutoff(signals, signals, 0.95)["msp"]
+    assert report["auto_processed"] == 2 / 3 and report["f1_auto"] == 1.0
+
+
 def test_window_spans_cover_everything():
     spans = window_spans(1200)
     assert spans[0][0] == 0 and spans[-1][1] == 1200

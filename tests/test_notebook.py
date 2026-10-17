@@ -7,6 +7,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 from .helpers import tiny_models, write_dataset
@@ -46,6 +47,8 @@ def test_notebook_runs_end_to_end(notebook_namespace, tmp_path, monkeypatch):
     run = Path("runs") / cfg.run_name()
     assert (run / "metrics.json").exists()
     ns["route"](run, "validation", target=0.5)
+    signals = dict(np.load(run / "routing_validation" / "signals.npz"))
+    assert set(ns["fixed_cutoff"](signals, signals, 0.5)) == set(ns["SIGNALS"])
     ns["show"](run, "validation", ns["pick"](run, "validation", "riskiest", 1)[0])
     table = ns["results_table"](Path("runs"), "validation")
     assert len(table) == 1 and "all" in table.columns

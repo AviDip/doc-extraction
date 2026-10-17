@@ -32,6 +32,7 @@ from .schema import Document, load_split
 
 GRID = 16  # layout descriptor resolution: GRID x GRID cells per page
 NEIGHBOURS = 5
+SIGNALS = ("novelty", "msp", "mahalanobis", "consistency")  # the oracle needs labels, so it cannot set a cut-off
 
 
 # ------------------------------------------------------------------ signals
@@ -106,6 +107,32 @@ def summarise(curve: np.ndarray, target: float) -> dict:
         "f1_at_full_coverage": float(f1[-1]),
         "exact_at_full_coverage": float(exact[-1]),
     }
+
+
+def cutoff(risk: np.ndarray, counts: np.ndarray, target: float) -> float:
+    """The largest risk at which the documents processed automatically still
+    reach the target F1, or -inf if even the safest group misses it."""
+    order = np.argsort(risk, kind="stable")
+    r, cum = risk[order], np.cumsum(counts[order], axis=0)
+    ends = np.flatnonzero(np.r_[r[1:] != r[:-1], True])
+    passing = [e for e in ends if prf(*cum[e])["f1"] >= target]
+    return float(r[passing[-1]]) if passing else -np.inf
+
+
+def fixed_cutoff(chosen_on: dict, applied_to: dict, target: float) -> dict:
+    """Choose each signal's cut-off on one set of documents, then apply it
+    unchanged to another, as a deployed system would. Both arguments hold the
+    signal arrays and per-document counts saved by `route`."""
+    report = {}
+    for name in SIGNALS:
+        cut = cutoff(chosen_on[name], chosen_on["counts"], target)
+        auto = applied_to[name] <= cut
+        report[name] = {
+            "auto_processed": float(auto.mean()),
+            "f1_auto": prf(*applied_to["counts"][auto].sum(axis=0))["f1"] if auto.any() else float("nan"),
+            "f1_to_person": prf(*applied_to["counts"][~auto].sum(axis=0))["f1"] if (~auto).any() else float("nan"),
+        }
+    return report
 
 
 def plot(curves: dict, target: float, path: Path) -> None:

@@ -421,6 +421,9 @@ A **risk score** ranks documents from safest to riskiest. The safest are process
 **Example.** Four documents with risks 0.1, 0.2, 0.2, 0.9 and 0, 0, 1, 3 mistakes. Processing 25% means the first document only: no mistakes. At 75%, the two documents with equal risk come in together, bringing one mistake. Equal risks always enter together, so ties never favour a score.
 
 The headline number is the largest coverage whose F1 still reaches 0.95: the share of documents that could skip a person. The area under the error curve (lower is better) sums up the whole curve.""",
+            "cutoff": """**Deciding in advance.** The curves above pick the best cut-off after seeing the answers. A real system must fix it beforehand. So the cut-off is chosen on one set of labelled documents (validation) and then applied, unchanged, to new documents (test). If the auto-processed test documents still reach the target F1, the risk score can really decide on its own which documents skip a person.
+
+**Example.** On validation, documents with confidence risk up to 0.12 reach F1 0.95 together, so the cut-off is 0.12. On test, 70% of documents have risk ≤ 0.12: they are processed automatically, and their F1 is measured. The other 30% go to a person.""",
             "plot": "Drawing the curves and running the full comparison for one run.",
         },
     },
@@ -561,10 +564,30 @@ coverage = {run.parent.parent.name + ' · ' + run.parent.name.removeprefix('rout
 print('Share of documents that can skip a person while F1 stays at the target:')
 pd.DataFrame(coverage).T.style.format('{:.0%}')
 """),
-    ("md", "### 17.3 Two documents up close\nThe riskiest document by the Mahalanobis score, then the safest."),
+    ("md", "### 17.3 Can the cut-off be fixed in advance?\nEach signal's cut-off is chosen on validation and applied unchanged to test. For WildReceipt this also crosses from familiar to new shops. DocILE has one labelled split, so it is cut in two random halves: the cut-off is chosen on one half and applied to the other."),
+    ("code", r"""
+def signals_of(run, split):
+    route(RUNS / run, split, target=0.95)
+    return dict(np.load(RUNS / run / f'routing_{split}' / 'signals.npz'))
+
+deployments = {
+    'CORD': fixed_cutoff(signals_of('cord_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0', 'validation'), signals_of('cord_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0', 'test'), 0.95),
+    'CORD, new shops': fixed_cutoff(signals_of('cord_disjoint_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0', 'validation'), signals_of('cord_disjoint_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0', 'test'), 0.95),
+    'WildReceipt, familiar → new shops': fixed_cutoff(signals_of('wildreceipt_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0', 'validation'), signals_of('wildreceipt_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0', 'test'), 0.95),
+}
+if RUN_DOCILE:
+    s = signals_of('docile_layoutlmv3_j0.0_k0.0_a0.0_c0.0_s0', 'val')
+    first = np.random.default_rng(0).permutation(len(s['counts'])) < len(s['counts']) // 2
+    deployments['DocILE, half → half'] = fixed_cutoff({k: v[first] for k, v in s.items()}, {k: v[~first] for k, v in s.items()}, 0.95)
+
+table = pd.DataFrame({(d, sig): r for d, rep in deployments.items() for sig, r in rep.items()}).T
+table.style.format({'auto_processed': '{:.0%}', 'f1_auto': '{:.3f}', 'f1_to_person': '{:.3f}'})
+"""),
+    ("md", "Read each row as: *with the cut-off fixed in advance, this share of new documents skipped a person, and they were extracted with this F1*. An F1 near 0.95 means the score transfers; well below it means the cut-off must be re-checked when the documents change."),
+    ("md", "### 17.4 Two documents up close\nThe riskiest document by the Mahalanobis score, then the safest."),
     ("code", "show(RUN, 'test', pick(RUN, 'test', 'riskiest', 1)[0])"),
     ("code", "show(RUN, 'test', pick(RUN, 'test', 'safest', 1)[0])"),
-    ("md", "### 17.4 DocILE official scores\nWith DocILE downloaded, the official scorer compares fields by position, for each layout group."),
+    ("md", "### 17.5 DocILE official scores\nWith DocILE downloaded, the official scorer compares fields by position, for each layout group."),
     ("code", r"""
 if RUN_DOCILE:
     for run in sorted(RUNS.glob('docile_*')):
