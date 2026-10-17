@@ -1,0 +1,44 @@
+[
+  {
+    "threshold": 0.3,
+    "templates": 728,
+    "test_replication": 0.34,
+    "train_docs_in_shared_templates": 0.2875
+  },
+  {
+    "threshold": 0.4,
+    "templates": 637,
+    "test_replication": 0.42,
+    "train_docs_in_shared_templates": 0.41875
+  },
+  {
+    "threshold": 0.5,
+    "templates": 555,
+    "test_replication": 0.51,
+    "train_docs_in_shared_templates": 0.51375
+  },
+  {
+    "threshold": 0.6,
+    "templates": 444,
+    "test_replication": 0.61,
+    "train_docs_in_shared_templates": 0.64625
+  },
+  {
+    "threshold": 0.7,
+    "templates": 334,
+    "test_replication": 0.72,
+    "train_docs_in_shared_templates": 0.7475
+  },
+  {
+    "threshold": 0.8,
+    "templates": 220,
+    "test_replication": 0.83,
+    "train_docs_in_shared_templates": 0.85625
+  },
+  {
+    "threshold": 0.9,
+    "templates": 87,
+    "test_replication": 0.99,
+    "train_docs_in_shared_templates": 0.9575
+  }
+]

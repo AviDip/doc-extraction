@@ -1,0 +1,44 @@
+[
+  {
+    "threshold": 0.3,
+    "templates": 1665,
+    "test_replication": 0.00423728813559322,
+    "train_docs_in_shared_templates": 0.0749802683504341
+  },
+  {
+    "threshold": 0.4,
+    "templates": 1625,
+    "test_replication": 0.012711864406779662,
+    "train_docs_in_shared_templates": 0.11681136543014996
+  },
+  {
+    "threshold": 0.5,
+    "templates": 1594,
+    "test_replication": 0.025423728813559324,
+    "train_docs_in_shared_templates": 0.13417521704814522
+  },
+  {
+    "threshold": 0.6,
+    "templates": 1506,
+    "test_replication": 0.08050847457627118,
+    "train_docs_in_shared_templates": 0.20599842146803474
+  },
+  {
+    "threshold": 0.7,
+    "templates": 1316,
+    "test_replication": 0.2266949152542373,
+    "train_docs_in_shared_templates": 0.3409629044988161
+  },
+  {
+    "threshold": 0.8,
+    "templates": 962,
+    "test_replication": 0.4427966101694915,
+    "train_docs_in_shared_templates": 0.5580110497237569
+  },
+  {
+    "threshold": 0.9,
+    "templates": 444,
+    "test_replication": 0.7754237288135594,
+    "train_docs_in_shared_templates": 0.8168902920284136
+  }
+]

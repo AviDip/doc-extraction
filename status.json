@@ -52,8 +52,10 @@
     "minutes": 7.2
   },
   "wr-calibrate": {
-    "state": "running",
-    "rev": 0
+    "state": "done",
+    "rev": 0,
+    "returncode": 0,
+    "minutes": 1.1
   },
   "cord-calibrate": {
     "state": "running",
