@@ -2,6 +2,8 @@
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/AviDip/doc-extraction/blob/main/colab.ipynb) experiments · [![Demo](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/AviDip/doc-extraction/blob/main/demo.ipynb) demo (CPU, ~5 min)
 
+**Start here: [`project.ipynb`](https://colab.research.google.com/github/AviDip/doc-extraction/blob/main/project.ipynb)**, the whole project in one explained notebook (generated from `docext/` by `scripts/build_notebook.py`; only the datasets are downloaded).
+
 Code for the PAI-ML 2 project: structural consistency training and layout-novelty routing for key
 information extraction on CORD, WildReceipt and (optionally) DocILE.
 
