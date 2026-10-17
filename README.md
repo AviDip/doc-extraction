@@ -1,6 +1,6 @@
 # Making Document Extraction Worth Automating
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/<github-user>/doc-extraction/blob/main/colab.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/AviDip/doc-extraction/blob/main/colab.ipynb)
 
 Code for the PAI-ML 2 project: structural consistency training and layout-novelty routing for key
 information extraction on CORD, WildReceipt and (optionally) DocILE.
@@ -76,7 +76,7 @@ python -m docext.train --data data/docile --eval-splits val --epochs 8 \
 python -m docext.evaluate runs/<run> --docile-path data/docile_raw
 python -m docext.routing runs/<run> --split val --target 0.95
 python -m docext.summarise runs --split val --csv results.csv
-python -m docext.hub push <hf-user>/doc-extraction-results
+python -m docext.hub push AviDip/doc-extraction-results
 ```
 
 Each run directory holds `meta.json`, `history.json` (token, arithmetic and cardinality losses per epoch),
